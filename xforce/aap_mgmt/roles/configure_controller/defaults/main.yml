@@ -1,0 +1,10 @@
+---
+# defaults file for manage_controller
+controller_token_description: "Authentication token for AAP configuration"
+
+controller_config_settings:
+  - name: "REMOTE_HOST_HEADERS"
+    value:
+      - "REMOTE_ADDR"
+      - "REMOTE_HOST"
+      - "HTTP_X_FORWARDED_FOR"

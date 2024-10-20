@@ -1,0 +1,47 @@
+---
+# tasks file for manage_hub_collections
+- name: Check that a hub host is specified
+  ansible.builtin.assert:
+    that: hub_host | default('') | length
+    fail_msg: "No hub_host defined; aborting"
+    success_msg: "hub_host set to {{ hub_host }}"
+
+- name: Check that a hub admin user is specified
+  ansible.builtin.assert:
+    that: hub_admin_user | default('') | length
+    fail_msg: "No hub_admin_user defined; aborting"
+    success_msg: "hub_admin_user set to {{ hub_admin_user }}"
+
+- name: Configure all remotes
+  ansible.hub.collection_remote:
+    ah_host: "{{ hub_host }}"
+    ah_username: "{{ hub_admin_user }}"
+    ah_password: "{{ hub_admin_password }}"
+    validate_certs: "{{ hub_validate_certs | default(true) }}"
+    name: "{{ current_repo.name }}"
+    url: "{{ current_repo.url }}"
+    auth_url: "{{ current_repo.auth_url | default('omit') }}"
+    token: "{{ current_repo.token | default('omit') }}"
+    requirements: "{{ current_repo.requirements | default('omit') }}"
+    proxy_url: "{{ hub_proxy_url | default('omit') }}"
+    proxy_username: "{{ hub_proxy_username | default('omit') }}"
+    proxy_password: "{{ hub_proxy_password | default('omit') }}"
+    state: present
+  loop: "{{ hub_remote_repos }}"
+  loop_control:
+    loop_var: current_repo
+
+- name: Configure all repositories
+  ansible.hub.collection_repository:
+    ah_host: "{{ hub_host }}"
+    ah_username: "{{ hub_admin_user }}"
+    ah_password: "{{ hub_admin_password }}"
+    validate_certs: "{{ hub_validate_certs | default(true) }}"
+    name: "{{ current_repo.name }}"
+    remote: "{{ current_repo.name }}"
+    state: present
+    update_repo: true
+    wait: false
+  loop: "{{ hub_remote_repos }}"
+  loop_control:
+    loop_var: current_repo

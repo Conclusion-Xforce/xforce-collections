@@ -1,0 +1,57 @@
+---
+# tasks file for manage_controller
+- name: Check that a controller host is specified
+  ansible.builtin.assert:
+    that: controller_host | default('') | length
+    fail_msg: "No controller_host defined; aborting"
+    success_msg: "Controller_host set to {{ controller_host }}"
+
+- name: Check that a controller admin user is specified
+  ansible.builtin.assert:
+    that: controller_admin_user | default('') | length
+    fail_msg: "No controller_admin_user defined; aborting"
+    success_msg: "Controller_admin_user set to {{ controller_admin_user }}"
+
+- name: Retrieve authentication token from controller using username/password
+  ansible.controller.token:
+    controller_host: "{{ controller_host }}"
+    controller_username: "{{ controller_admin_user }}"
+    controller_password: "{{ controller_admin_password | default('') }}"
+    validate_certs: "{{ controller_validate_certs | default(true) }}"
+    description: "{{ controller_token_description }}"
+    scope: "write"
+    state: present
+  # no_log: true
+
+- name: Configure ansible automation controller settings
+  ansible.controller.settings:
+    controller_host: "{{ controller_host }}"
+    controller_oauthtoken: "{{ controller_token }}"
+    validate_certs: "{{ controller_validate_certs | default(true) }}"
+    name: "{{ cur_setting.name }}"
+    value: "{{ cur_setting.value }}"
+  loop: "{{ controller_config_settings }}"
+  loop_control:
+    loop_var: cur_setting
+    label: "{{ cur_setting.name }}"
+
+- name: Ensure the necessary instance groups exist
+  ansible.controller.instance_group:
+    controller_host: "{{ controller_host }}"
+    controller_oauthtoken: "{{ controller_token }}"
+    validate_certs: "{{ controller_validate_certs | default(true) }}"
+    name: "{{ current_group.key }}"
+    instances: "{{ current_group.value }}"
+  loop: "{{ controller_instance_groups | default({}) | dict2items }}"
+  loop_control:
+    loop_var: current_group
+    label: "{{ current_group.key }}"
+
+- name: Delete our Token with the token we created
+  ansible.controller.token:
+    controller_host: "{{ controller_host }}"
+    controller_oauthtoken: "{{ controller_token }}"
+    validate_certs: "{{ controller_validate_certs | default(true) }}"
+    existing_token: "{{ controller_token }}"
+    state: absent
+  when: controller_token is defined

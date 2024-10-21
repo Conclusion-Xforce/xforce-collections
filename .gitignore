@@ -1,0 +1,16 @@
+# 
+*.retry
+.ansible_vault
+ansible.cfg
+ansible-navigator.log
+ansible-navigator.yml
+*-artifact-*.json
+collections/*
+!collections/requirements.yml
+playbook-runs/
+
+# No collection tar-balls please
+*/*/*.tar.gz
+
+# Ignore vscode settings
+.vscode/

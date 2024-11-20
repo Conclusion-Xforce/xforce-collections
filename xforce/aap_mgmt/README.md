@@ -2,6 +2,8 @@
 
 Collection of roles to manage and configure Ansible Automation Platform. It supports Ansible Automation Platform **2.5**. For Ansible Automation Platform up to 2.4, use the [xforce.aap_tools](../aap_tools/README.md) collection.
 
+Work in progress.
+
 ## Contents
 
 | Role                                                                   | Description                                                                                 |

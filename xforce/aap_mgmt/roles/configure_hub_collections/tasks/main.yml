@@ -3,14 +3,14 @@
 - name: Check that a hub host is specified
   ansible.builtin.assert:
     that: hub_host | default('') | length
-    fail_msg: "No hub_host defined; aborting"
-    success_msg: "hub_host set to {{ hub_host }}"
+    fail_msg: No hub_host defined; aborting
+    success_msg: hub_host set to {{ hub_host }}
 
 - name: Check that a hub admin user is specified
   ansible.builtin.assert:
     that: hub_admin_user | default('') | length
-    fail_msg: "No hub_admin_user defined; aborting"
-    success_msg: "hub_admin_user set to {{ hub_admin_user }}"
+    fail_msg: No hub_admin_user defined; aborting
+    success_msg: hub_admin_user set to {{ hub_admin_user }}
 
 - name: Configure all remotes
   ansible.hub.collection_remote:

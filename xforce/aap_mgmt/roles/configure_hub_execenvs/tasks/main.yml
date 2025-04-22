@@ -20,10 +20,10 @@
     validate_certs: "{{ hub_validate_certs | default(true) }}"
     name: "{{ current_reg.name }}"
     url: "{{ current_reg.proto }}://{{ current_reg.host }}"
-    username: "{{ aap_registry_user }}"
-    password: "{{ aap_registry_token }}"
+    username: "{{ current_reg.username }}"
+    password: "{{ current_reg.password }}"
     state: present
-  loop: "{{ aap_ee_registries }}"
+  loop: "{{ hub_ee_registries }}"
   loop_control:
     loop_var: current_reg
     label: current_reg.label
@@ -38,10 +38,10 @@
     description: "{{ current_ee.description }}"
     include_tags: "{{ current_ee.tags | default(omit) }}"
     upstream_name: "{{ current_ee.namespace }}/{{ current_ee.image }}"
-    registry: "{{ aap_ee_registries | selectattr('label', 'eq', current_ee.label) | map(attribute='name') | first }}"
+    registry: "{{ hub_ee_registries | selectattr('label', 'eq', current_ee.label) | map(attribute='name') | first }}"
     state: present
   when: current_ee.label is defined
-  loop: "{{ aap_ee_images }}"
+  loop: "{{ hub_ee_images }}"
   loop_control:
     loop_var: current_ee
     label: current_ee.image
@@ -53,8 +53,8 @@
     ah_password: "{{ hub_admin_password }}"
     validate_certs: "{{ hub_validate_certs | default(true) }}"
     name: "{{ current_reg.name }}"
-    wait: "{{ aap_ee_sync_wait }}"
-  loop: "{{ aap_ee_registries }}"
+    wait: "{{ hub_ee_sync_wait }}"
+  loop: "{{ hub_ee_registries }}"
   loop_control:
     loop_var: current_reg
     label: current_reg.label
@@ -66,9 +66,9 @@
     ah_password: "{{ hub_admin_password }}"
     validate_certs: "{{ hub_validate_certs | default(true) }}"
     name: "{{ current_ee.namespace }}/{{ current_ee.image }}"
-    wait: "{{ aap_ee_sync_wait }}"
+    wait: "{{ hub_ee_sync_wait }}"
   when: current_ee.label is defined
-  loop: "{{ aap_ee_images }}"
+  loop: "{{ hub_ee_images }}"
   loop_control:
     loop_var: current_ee
     label: current_ee.image

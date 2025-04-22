@@ -10,3 +10,4 @@ Work in progress.
 | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
 | [configure_controller](roles/configure_controller/README.md)           | Role to perform global Ansible Automation Controller configuration.                         |
 | [configure_hub_collections](roles/configure_hub_collections/README.md) | Role to perform the collection repositories on Ansible Private AutomationHub configuration. |
+| [configure_hub_execenvs](roles/configure_hub_execenvs/README.md)       | Role to perform the execution environment on Ansible Private AutomationHub configuration.   |

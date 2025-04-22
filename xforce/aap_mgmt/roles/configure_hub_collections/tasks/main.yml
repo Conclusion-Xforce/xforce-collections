@@ -14,7 +14,7 @@
 
 - name: Check that the Red Hat token is specified
   ansible.builtin.assert:
-    that: hub_redhat_token | length
+    that: hub_redhat_token | default('') | length
     fail_msg: "No hub_redhat_token defined; aborting"
     success_msg: "hub_redhat_token defined with length {{ hub_admin_user | length }}"
 

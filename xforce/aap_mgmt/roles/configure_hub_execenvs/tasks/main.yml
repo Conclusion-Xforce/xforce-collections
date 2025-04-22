@@ -19,7 +19,7 @@
     ah_password: "{{ hub_admin_password }}"
     validate_certs: "{{ hub_validate_certs | default(true) }}"
     name: "{{ current_reg.name }}"
-    url: "https://{{ current_reg.host }}"
+    url: "{{ current_reg.proto }}://{{ current_reg.host }}"
     username: "{{ aap_registry_user }}"
     password: "{{ aap_registry_token }}"
     state: present
@@ -40,6 +40,33 @@
     upstream_name: "{{ current_ee.namespace }}/{{ current_ee.image }}"
     registry: "{{ aap_ee_registries | selectattr('label', 'eq', current_ee.label) | map(attribute='name') | first }}"
     state: present
+  when: current_ee.label is defined
+  loop: "{{ aap_ee_images }}"
+  loop_control:
+    loop_var: current_ee
+    label: current_ee.image
+
+- name: Sync the registries
+  ansible.hub.ah_ee_registry_sync:
+    ah_host: "{{ hub_host }}"
+    ah_username: "{{ hub_admin_user }}"
+    ah_password: "{{ hub_admin_password }}"
+    validate_certs: "{{ hub_validate_certs | default(true) }}"
+    name: "{{ current_reg.name }}"
+    wait: "{{ aap_ee_sync_wait }}"
+  loop: "{{ aap_ee_registries }}"
+  loop_control:
+    loop_var: current_reg
+    label: current_reg.label
+
+- name: Sync the execution environments on the hub
+  ansible.hub.ah_ee_repository_sync:
+    ah_host: "{{ hub_host }}"
+    ah_username: "{{ hub_admin_user }}"
+    ah_password: "{{ hub_admin_password }}"
+    validate_certs: "{{ hub_validate_certs | default(true) }}"
+    name: "{{ current_ee.namespace }}/{{ current_ee.image }}"
+    wait: "{{ aap_ee_sync_wait }}"
   when: current_ee.label is defined
   loop: "{{ aap_ee_images }}"
   loop_control:

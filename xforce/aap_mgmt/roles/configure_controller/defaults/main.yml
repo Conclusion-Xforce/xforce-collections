@@ -9,19 +9,19 @@ controller_config_settings:
       - "REMOTE_HOST"
       - "HTTP_X_FORWARDED_FOR"
 
-aap_ee_repositories:
+aap_ee_images:
   - namespace: ansible-automation-platform-25
     image: ee-supported-rhel9
     label: rh-registry
     name: Default execution environment - RHEL-9
     description: Red Hat Ansible Automation Platform Supported Execution Environment on RHEL-9
-    tags:
-      - latest
   - namespace: ansible-automation-platform-25
     image: ee-supported-rhel8
     label: rh-registry
     name: Default execution environment - RHEL-8
     description: Red Hat Ansible Automation Platform Supported Execution Environment on RHEL-8
+    tags:
+      - latest
   - namespace: ansible-automation-platform-25
     image: de-supported-rhel9
     label: rh-registry
@@ -34,3 +34,5 @@ aap_ee_repositories:
     label: rh-registry
     name: Default decision environment - RHEL-8
     description: Red Hat Ansible Automation Platform Supported Decision Environment on RHEL-8
+
+aap_control_plane_ee: ansible-automation-platform-25/ee-supported-rhel9

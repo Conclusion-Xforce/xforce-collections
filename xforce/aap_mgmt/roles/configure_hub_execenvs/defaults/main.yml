@@ -1,6 +1,6 @@
 ---
 # defaults file for manage_hub_exec_envs
-hub_ee_registries:
+aap_ee_registries:
   - label: rh-registry
     name: "Red Hat Registry"
     host: registry.redhat.io
@@ -8,7 +8,7 @@ hub_ee_registries:
     username: "registry_user"
     password: "registry_token"
 
-hub_ee_images:
+aap_ee_images:
   - namespace: ansible-automation-platform-25
     image: ee-supported-rhel9
     label: rh-registry
@@ -34,5 +34,4 @@ hub_ee_images:
     name: Default decision environment - RHEL-8
     description: Red Hat Ansible Automation Platform Supported Decision Environment on RHEL-8
 
-hub_control_plane_ee: ansible-automation-platform-25/ee-supported-rhel9
 hub_ee_sync_wait: true

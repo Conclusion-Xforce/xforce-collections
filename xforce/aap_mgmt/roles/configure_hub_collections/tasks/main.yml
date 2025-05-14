@@ -12,6 +12,12 @@
     fail_msg: "No hub_admin_user defined; aborting"
     success_msg: "hub_admin_user set to {{ hub_admin_user }}"
 
+- name: Check that the Red Hat token is specified
+  ansible.builtin.assert:
+    that: hub_redhat_token | default('') | length
+    fail_msg: "No hub_redhat_token defined; aborting"
+    success_msg: "hub_redhat_token defined with length {{ hub_redhat_token | length }}"
+
 - name: Configure all remotes
   ansible.hub.collection_remote:
     ah_host: "{{ hub_host }}"

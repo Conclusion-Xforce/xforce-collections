@@ -1,27 +1,26 @@
 ---
-# defaults file for manage_controller
-controller_token_description: "Authentication token for AAP configuration"
+# defaults file for manage_hub_exec_envs
+hub_ee_registries:
+  - label: rh-registry
+    name: "Red Hat Registry"
+    host: registry.redhat.io
+    proto: https
+    username: "registry_user"
+    password: "registry_token"
 
-controller_config_settings:
-  - name: "REMOTE_HOST_HEADERS"
-    value:
-      - "REMOTE_ADDR"
-      - "REMOTE_HOST"
-      - "HTTP_X_FORWARDED_FOR"
-
-aap_ee_repositories:
+hub_ee_images:
   - namespace: ansible-automation-platform-25
     image: ee-supported-rhel9
     label: rh-registry
     name: Default execution environment - RHEL-9
     description: Red Hat Ansible Automation Platform Supported Execution Environment on RHEL-9
-    tags:
-      - latest
   - namespace: ansible-automation-platform-25
     image: ee-supported-rhel8
     label: rh-registry
     name: Default execution environment - RHEL-8
     description: Red Hat Ansible Automation Platform Supported Execution Environment on RHEL-8
+    tags:
+      - latest
   - namespace: ansible-automation-platform-25
     image: de-supported-rhel9
     label: rh-registry
@@ -34,3 +33,6 @@ aap_ee_repositories:
     label: rh-registry
     name: Default decision environment - RHEL-8
     description: Red Hat Ansible Automation Platform Supported Decision Environment on RHEL-8
+
+hub_control_plane_ee: ansible-automation-platform-25/ee-supported-rhel9
+hub_ee_sync_wait: true

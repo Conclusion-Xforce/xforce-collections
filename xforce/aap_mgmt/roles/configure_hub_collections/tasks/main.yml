@@ -22,7 +22,7 @@
   ansible.builtin.assert:
     that: hub_redhat_token | default('') | length
     fail_msg: "No hub_redhat_token defined; aborting"
-    success_msg: "hub_redhat_token defined"
+    success_msg: "hub_redhat_token defined with length {{ hub_redhat_token | length }}"
 
 - name: Configure all remotes
   ansible.hub.collection_remote:

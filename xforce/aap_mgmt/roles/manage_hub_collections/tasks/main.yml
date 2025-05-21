@@ -12,6 +12,12 @@
     fail_msg: "No hub_admin_user defined; aborting"
     success_msg: "hub_admin_user set to {{ hub_admin_user }}"
 
+- name: Check that a hub admin password is specified
+  ansible.builtin.assert:
+    that: hub_admin_password | default('') | length
+    fail_msg: "No hub_admin_password defined; aborting"
+    success_msg: "hub_admin_password defined"
+
 - name: Check that the Red Hat token is specified
   ansible.builtin.assert:
     that: hub_redhat_token | default('') | length

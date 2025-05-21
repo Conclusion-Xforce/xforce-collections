@@ -14,6 +14,7 @@ Role Variables
 = hub_host: FQDN Hostname of the hub host (or VIP-name) that needs configuring
 = hub_admin_user: Username of the admin user on the hub
 = hub_admin_password: Password of the admin user on the hub
+= hub_redhat_token: API Access token for Red Hat supported collection download, to be created at console.redhat.com
 - hub_validate_certs: Boolean determining SSL certificate validation
 - hub_remote_repos: List dictionaries holding remote sources for repositories
     - = name: Name of the collection repository in the hub
@@ -24,7 +25,6 @@ Role Variables
 - hub_proxy_url: Url of a http-proxy to be used to access remote sources
 - hub_proxy_username: Username for authentication to the http-proxy
 - hub_proxy_password: Password for authentication to the http-proxy
-= hub_redhat_token: API Access token for Red Hat supported collection download, to be created at console.redhat.com
 - hub_reposync_wait: Boolean determining waiting for collection repository syncing
 
 Example Playbook

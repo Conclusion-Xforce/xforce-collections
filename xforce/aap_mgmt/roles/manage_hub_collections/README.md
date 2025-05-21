@@ -1,19 +1,19 @@
-xforce.aap_tools.configure_hub_collections
+xforce.aap_tools.manage_hub_collections
 =========
 
-Role to perform the collection repositories on Ansible Private AutomationHub configuration.
+Role to manage the collection repositories on Ansible Private Automation Hub.
 
 Requirements
 ------------
 
-Collection: infra.ah_configuration, version '<2.1.0'
+Collection: ansible.hub, version '>=1.0.0'
 
 Role Variables
 --------------
 
 = hub_host: FQDN Hostname of the hub host (or VIP-name) that needs configuring
 = hub_admin_user: Username of the admin user on the hub
-- hub_admin_password: Password of the admin user on the hub
+= hub_admin_password: Password of the admin user on the hub
 - hub_validate_certs: Boolean determining SSL certificate validation
 - hub_remote_repos: List dictionaries holding remote sources for repositories
     - = name: Name of the collection repository in the hub
@@ -24,8 +24,8 @@ Role Variables
 - hub_proxy_url: Url of a http-proxy to be used to access remote sources
 - hub_proxy_username: Username for authentication to the http-proxy
 - hub_proxy_password: Password for authentication to the http-proxy
-- hub_redhat_token: API Access token for Red Hat supported collection download, to be created at console.redhat.com
-
+= hub_redhat_token: API Access token for Red Hat supported collection download, to be created at console.redhat.com
+- hub_reposync_wait: Boolean determining waiting for collection repository syncing
 
 Example Playbook
 ----------------
@@ -34,7 +34,7 @@ Including an example of how to use your role (for instance, with variables passe
 
     - hosts: servers
       roles:
-        - role: xforce.aap_tools.configure_hub_collections
+        - role: xforce.aap_mgmt.configure_hub_collections
           hub_host: automationcontroller.example.com
           hub_admin_user: admin
           hub_remote_repos:

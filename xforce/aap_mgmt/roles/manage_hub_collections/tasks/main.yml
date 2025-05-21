@@ -12,8 +12,14 @@
     fail_msg: "No hub_admin_user defined; aborting"
     success_msg: "hub_admin_user set to {{ hub_admin_user }}"
 
+- name: Check that the Red Hat token is specified
+  ansible.builtin.assert:
+    that: hub_redhat_token | default('') | length
+    fail_msg: "No hub_redhat_token defined; aborting"
+    success_msg: "hub_redhat_token defined with length {{ hub_redhat_token | length }}"
+
 - name: Configure all remotes
-  infra.ah_configuration.collection_remote:
+  ansible.hub.collection_remote:
     ah_host: "{{ hub_host }}"
     ah_username: "{{ hub_admin_user }}"
     ah_password: "{{ hub_admin_password }}"
@@ -32,7 +38,7 @@
     loop_var: current_repo
 
 - name: Configure all repositories
-  infra.ah_configuration.collection_repository:
+  ansible.hub.collection_repository:
     ah_host: "{{ hub_host }}"
     ah_username: "{{ hub_admin_user }}"
     ah_password: "{{ hub_admin_password }}"
@@ -41,7 +47,7 @@
     remote: "{{ current_repo.name }}"
     state: present
     update_repo: true
-    wait: false
+    wait: "{{ hub_reposync_wait }}"
   loop: "{{ hub_remote_repos }}"
   loop_control:
     loop_var: current_repo

@@ -1,22 +1,35 @@
-Role Name
+xforce.aap_tools.manage_hub_execenvs
 =========
 
-A brief description of the role goes here.
+Role to manage the execution environment on Ansible Private Automation Hub.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+Collection: infra.ah_configuration, version '>=2.0'
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
-
-Dependencies
-------------
-
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+= hub_host: FQDN Hostname of the hub host (or VIP-name) that needs configuring
+= hub_admin_user: Username of the admin user on the hub
+- hub_admin_password: Password of the admin user on the hub
+- hub_validate_certs: Boolean determining SSL certificate validation
+- aap_ee_registries: List of remote registries for execution images
+  - = label: Label to link execution environment images to registries
+    = name: Name of the registry within Private Automation Hub
+    = host: Source container registry
+    = proto: Protocol to access registry (e.g. https)
+    - username: Source registry username
+    - password: Source registry password (always store encrypted)
+- aap_ee_images: List of execution environment images
+    - namespace: Namespace of the execution environment image
+    = image: Name of the image
+    - label: Label to link the image to a remote registry
+    = name: Name of the image within Private Automation Hub
+    - description: Description of the image
+    - tags: List of tags to include for this image
+- hub_ee_sync_wait: Boolean whether or not to wait for synchronization to complete.
 
 Example Playbook
 ----------------
@@ -25,14 +38,24 @@ Including an example of how to use your role (for instance, with variables passe
 
     - hosts: servers
       roles:
-         - { role: username.rolename, x: 42 }
+        - role: xforce.aap_mgmt.configure_hub_execenvs
+          hub_host: automationcontroller.example.com
+          hub_admin_user: admin
+          aap_ee_registries:
+            - label: rh-registry
+              name: "Red Hat Registry"
+              host: registry.redhat.io
+              proto: https
+              username: "registry_user"
+              password: "registry_token"
+          aap_ee_images:
+            - namespace: ansible-automation-platform-25
+              image: ee-supported-rhel9
+              label: rh-registry
+              name: Default execution environment - RHEL-9
+              description: Red Hat Ansible Automation Platform Supported Execution Environment on RHEL-9
 
 License
 -------
 
-BSD
-
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+GPL-3.0-only

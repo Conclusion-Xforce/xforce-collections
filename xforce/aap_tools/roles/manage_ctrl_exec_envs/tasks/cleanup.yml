@@ -1,0 +1,32 @@
+---
+- name: Create a list of execution environments that should exist
+  ansible.builtin.set_fact:
+    config_images: >
+      {{ config_images | default([]) +
+      [hub_host + '/' + current_ee.namespace + '/' + current_ee.image + ':' + current_ee.tag | default('latest')] }}
+  loop: "{{ hub_ee_images }}"
+  loop_control:
+    loop_var: current_ee
+    label: "{{ current_ee.image }}"
+
+- name: Print images that can be deleted
+  ansible.builtin.debug:
+    msg: "Image {{ cur_image }} can be deleted"
+  when: cur_image not in config_images
+  loop: "{{ __aap_ee_images | map(attribute='image') }}"
+  loop_control:
+    loop_var: cur_image
+
+- name: Remove the execution environments from the controller that should not exist
+  ansible.controller.execution_environment:
+    controller_host: "{{ controller_host }}"
+    controller_oauthtoken: "{{ controller_token }}"
+    validate_certs: "{{ aap_validate_certs | default(true) }}"
+    name: "{{ cur_image.name }}"
+    image: "{{ cur_image.image }}"
+    state: "absent"
+  when: cur_image.image not in config_images
+  loop: "{{ __aap_ee_images }}"
+  loop_control:
+    loop_var: cur_image
+    label: "{{ cur_image.image }}"

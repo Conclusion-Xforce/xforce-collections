@@ -21,9 +21,9 @@
     description: "{{ controller_token_description }}"
     scope: "write"
     state: present
-  # no_log: true
+  no_log: true
 
-- name: Configure ansible automation controller settings
+- name: Ensure desired configuration settings are in place
   ansible.controller.settings:
     controller_host: "{{ controller_host }}"
     controller_oauthtoken: "{{ controller_token }}"
@@ -46,6 +46,34 @@
   loop_control:
     loop_var: current_group
     label: "{{ current_group.key }}"
+
+- name: Setup retention period for cleanup jobs when retention period is defined
+  ansible.controller.schedule:
+    controller_host: "{{ controller_host }}"
+    controller_oauthtoken: "{{ controller_token }}"
+    validate_certs: "{{ controller_validate_certs | default(true) }}"
+    state: present
+    name: "{{ cur_schedule.name }}"
+    unified_job_template: "{{ cur_schedule.template }}"
+    rrule: "{{ cur_schedule.rrule | default(omit) }}"
+    extra_data: "{{ cur_schedule.extra_data | default(omit) }}"
+  loop: "{{ cleanup_management_jobs }}"
+  loop_control:
+    loop_var: cur_schedule
+    label: "{{ cur_schedule.name }}"
+
+- name: Configure global credentials when needed
+  ansible.builtin.include_tasks:
+    file: config_credentials.yml
+  loop: "{{ aap_global_credentials | default([]) }}"
+  loop_control:
+    loop_var: cur_credential
+    label: "{{ cur_credential.name }}"
+
+- name: Configure LDAP authentication when needed
+  ansible.builtin.include_tasks:
+    file: config_auth_ldap.yml
+  when: aap_ldap_auth
 
 - name: Delete our Token with the token we created
   ansible.controller.token:

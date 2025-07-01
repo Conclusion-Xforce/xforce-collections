@@ -2,6 +2,7 @@
 *.retry
 .ansible_vault
 .ansible-lint
+.cache
 ansible.cfg
 ansible-navigator.log
 ansible-navigator.yml

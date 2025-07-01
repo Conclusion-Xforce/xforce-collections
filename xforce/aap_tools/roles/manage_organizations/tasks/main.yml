@@ -1,0 +1,46 @@
+---
+# tasks file for manage_global
+- name: Retrieve authentication token from controller using username/password
+  ansible.controller.token:
+    controller_host: "{{ controller_host }}"
+    controller_username: "{{ controller_username }}"
+    controller_password: "{{ controller_password }}"
+    description: "Token for automated organization configuration"
+    scope: "write"
+    state: present
+    validate_certs: "{{ aap_validate_certs }}"
+#  no_log: true
+
+- name: Ensure organization and team exist
+  ansible.builtin.include_tasks:
+    file: organizations.yml
+  loop: "{{ organizations }}"
+  loop_control:
+    loop_var: current_org
+
+- name: Configure LDAP organization mapping
+  ansible.controller.settings:
+    controller_host: "{{ controller_host }}"
+    controller_oauthtoken: "{{ controller_token }}"
+    validate_certs: "{{ aap_validate_certs }}"
+    name: "AUTH_LDAP_ORGANIZATION_MAP"
+    value: "{{ ldap_org_map }}"
+  when: aap_sso_enabled
+
+- name: Configure LDAP team mapping
+  ansible.controller.settings:
+    controller_host: "{{ controller_host }}"
+    controller_oauthtoken: "{{ controller_token }}"
+    validate_certs: "{{ aap_validate_certs }}"
+    name: "AUTH_LDAP_TEAM_MAP"
+    value: "{{ ldap_team_map }}"
+  when: aap_sso_enabled
+
+- name: Delete the authentication token with the token we created
+  ansible.controller.token:
+    controller_host: "{{ controller_host }}"
+    controller_oauthtoken: "{{ controller_token }}"
+    existing_token: "{{ controller_token }}"
+    state: absent
+    validate_certs: "{{ aap_validate_certs }}"
+  when: controller_token is defined

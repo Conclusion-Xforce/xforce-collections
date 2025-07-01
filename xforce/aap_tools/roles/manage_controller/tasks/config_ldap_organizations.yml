@@ -1,0 +1,115 @@
+---
+- name: Get id of credential_type galaxy_api_token
+  ansible.builtin.set_fact:
+    galaxy_api_token_id: >
+      {{ __aap_credential_types |
+        selectattr('namespace', 'eq', 'galaxy_api_token') | map(attribute='id') | first }}
+
+- name: Get all Galaxy and Hub credentials from controller
+  ansible.builtin.set_fact:
+    galaxy_credential: >
+      {{ __aap_credentials |
+        selectattr('credential_type', 'eq', galaxy_api_token_id | int) |
+        selectattr('name', 'contains', 'Automation Hub') | map(attribute='name') }}
+
+- name: Convert the list of users to a real list
+  ansible.builtin.set_fact:
+    __aap_userlist: "{{ (__aap_userlist | default([]) + [__aap_users]) | flatten }}"
+
+- name: Ensure organization exists
+  ansible.controller.organization:
+    controller_host: "{{ controller_host }}"
+    controller_oauthtoken: "{{ controller_token }}"
+    validate_certs: "{{ controller_validate_certs }}"
+    name: "{{ current_org.name }}"
+    description: "{{ current_org.description | default('Organization: ' + current_org.name) }}"
+    default_environment: "{{ current_org.default_environment | default(omit) }}"
+    galaxy_credentials: "{{ galaxy_credential | default(omit) }}"
+    instance_groups: "{{ current_org.instance_groups | default(omit) }}"
+    max_hosts: "{{ current_org.max_hosts | default(omit) }}"
+    notification_templates_approvals: "{{ current_org.notification_templates_approvals | default(omit) }}"
+    notification_templates_error: "{{ current_org.notification_templates_error | default(omit) }}"
+    notification_templates_started: "{{ current_org.notification_templates_started | default(omit) }}"
+    notification_templates_success: "{{ current_org.notification_templates_success | default(omit) }}"
+    state: present
+
+- name: Ensure teams exist
+  ansible.controller.team:
+    controller_host: "{{ controller_host }}"
+    controller_oauthtoken: "{{ controller_token }}"
+    validate_certs: "{{ controller_validate_certs }}"
+    name: "{{ current_team.name }}"
+    description: "{{ current_team.description }}"
+    organization: "{{ current_org.name }}"
+    state: "{{ current_team.state | default('present') }}"
+  loop: "{{ current_org.teams }}"
+  loop_control:
+    loop_var: current_team
+
+- name: Make users organization admin if required
+  ansible.controller.role:
+    controller_host: "{{ controller_host }}"
+    controller_oauthtoken: "{{ controller_token }}"
+    validate_certs: "{{ controller_validate_certs }}"
+    organizations: "{{ current_org.name }}"
+    users: "{{ current_org.organization_admin | ansible.builtin.intersect(__aap_userlist | map(attribute='username')) }}"
+    role: "admin"
+    state: present
+  when:
+    - current_org.organization_admin is defined
+    - current_org.organization_admin | length > 0
+
+- name: Make users credential admin if required
+  ansible.controller.role:
+    controller_host: "{{ controller_host }}"
+    controller_oauthtoken: "{{ controller_token }}"
+    validate_certs: "{{ controller_validate_certs }}"
+    organizations: "{{ current_org.name }}"
+    users: "{{ current_org.credential_admin | ansible.builtin.intersect(__aap_userlist | map(attribute='username')) }}"
+    role: "admin"
+    state: present
+  when:
+    - current_org.credential_admin is defined
+    - current_org.credential_admin | length > 0
+
+- name: Clear the team list
+  ansible.builtin.set_fact:
+    team_list: []
+
+- name: Define a list of LDAP groups for the org mapping
+  ansible.builtin.set_fact:
+    team_list: |
+      {{ team_list | default([]) +
+      [ldap_map_prefix + current_org.org_id + '_' + current_team.authorization_type + ldap_map_suffix] }}
+  loop: "{{ current_org.teams }}"
+  loop_control:
+    loop_var: current_team
+
+- name: Add LDAP organization mapping to the list
+  ansible.builtin.set_fact:
+    ldap_org_map: |
+      {{ ldap_org_map | default({}) | combine (
+        {
+          current_org.name: {
+            "remove_admins": true,
+            "remove_users": false,
+            "users": team_list
+          }
+        }
+      ) }}
+
+- name: Add LDAP team mapping to the list
+  ansible.builtin.set_fact:
+    ldap_team_map: |
+      {{ ldap_team_map | default({}) | combine (
+        {
+          current_team.name: {
+            "organization": current_org.name,
+            "remove": false,
+            "users": ldap_map_prefix + current_org.org_id + '_' + current_team.authorization_type + ldap_map_suffix
+          }
+        }
+      ) }}
+  loop: "{{ current_org.teams }}"
+  loop_control:
+    loop_var: current_team

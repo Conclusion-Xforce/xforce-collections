@@ -8,21 +8,21 @@
 
 - name: Check that a hub admin user is specified
   ansible.builtin.assert:
-    that: aap_admin_user | default('') | length
-    fail_msg: "No aap_admin_user defined; aborting"
-    success_msg: "aap_admin_user set to {{ aap_admin_user }}"
+    that: hub_admin_user | default('') | length
+    fail_msg: "No hub_admin_user defined; aborting"
+    success_msg: "hub_admin_user set to {{ hub_admin_user }}"
 
 - name: Check that a hub admin password is specified
   ansible.builtin.assert:
-    that: aap_admin_password | default('') | length
-    fail_msg: "No aap_admin_password defined; aborting"
-    success_msg: "aap_admin_password defined"
+    that: hub_admin_password | default('') | length
+    fail_msg: "No hub_admin_password defined; aborting"
+    success_msg: "hub_admin_password defined"
 
 - name: Configure the registries for execution environments
   infra.ah_configuration.ah_ee_registry:
     ah_host: "{{ hub_host }}"
-    ah_username: "{{ aap_admin_user }}"
-    ah_password: "{{ aap_admin_password }}"
+    ah_username: "{{ hub_admin_user }}"
+    ah_password: "{{ hub_admin_password }}"
     validate_certs: "{{ hub_validate_certs | default(true) }}"
     name: "{{ current_reg.name }}"
     url: "{{ current_reg.proto }}://{{ current_reg.host }}"
@@ -37,8 +37,8 @@
 - name: Add the execution environments to the hub
   infra.ah_configuration.ah_ee_repository:
     ah_host: "{{ hub_host }}"
-    ah_username: "{{ aap_admin_user }}"
-    ah_password: "{{ aap_admin_password }}"
+    ah_username: "{{ hub_admin_user }}"
+    ah_password: "{{ hub_admin_password }}"
     validate_certs: "{{ hub_validate_certs | default(true) }}"
     name: "{{ current_ee.namespace }}/{{ current_ee.image }}"
     description: "{{ current_ee.description }}"
@@ -55,8 +55,8 @@
 - name: Sync the registries
   infra.ah_configuration.ah_ee_registry_sync:
     ah_host: "{{ hub_host }}"
-    ah_username: "{{ aap_admin_user }}"
-    ah_password: "{{ aap_admin_password }}"
+    ah_username: "{{ hub_admin_user }}"
+    ah_password: "{{ hub_admin_password }}"
     validate_certs: "{{ hub_validate_certs | default(true) }}"
     name: "{{ current_reg.name }}"
     wait: "{{ hub_ee_sync_wait }}"
@@ -69,8 +69,8 @@
 - name: Sync the execution environments on the hub
   infra.ah_configuration.ah_ee_repository_sync:
     ah_host: "{{ hub_host }}"
-    ah_username: "{{ aap_admin_user }}"
-    ah_password: "{{ aap_admin_password }}"
+    ah_username: "{{ hub_admin_user }}"
+    ah_password: "{{ hub_admin_password }}"
     validate_certs: "{{ hub_validate_certs | default(true) }}"
     name: "{{ current_ee.namespace }}/{{ current_ee.image }}"
     wait: "{{ hub_ee_sync_wait }}"

@@ -8,15 +8,15 @@
 
 - name: Check that a hub admin user is specified
   ansible.builtin.assert:
-    that: aap_admin_user | default('') | length
-    fail_msg: "No aap_admin_user defined; aborting"
-    success_msg: "aap_admin_user set to {{ aap_admin_user }}"
+    that: hub_admin_user | default('') | length
+    fail_msg: "No hub_admin_user defined; aborting"
+    success_msg: "hub_admin_user set to {{ hub_admin_user }}"
 
 - name: Check that a hub admin password is specified
   ansible.builtin.assert:
-    that: aap_admin_password | default('') | length
-    fail_msg: "No aap_admin_password defined; aborting"
-    success_msg: "aap_admin_password defined"
+    that: hub_admin_password | default('') | length
+    fail_msg: "No hub_admin_password defined; aborting"
+    success_msg: "hub_admin_password defined"
 
 - name: Check that the Red Hat token is specified
   ansible.builtin.assert:
@@ -27,8 +27,8 @@
 - name: Configure all remotes
   ansible.hub.collection_remote:
     ah_host: "{{ hub_host }}"
-    ah_username: "{{ aap_admin_user }}"
-    ah_password: "{{ aap_admin_password }}"
+    ah_username: "{{ hub_admin_user }}"
+    ah_password: "{{ hub_admin_password }}"
     validate_certs: "{{ hub_validate_certs | default(true) }}"
     name: "{{ current_repo.name }}"
     url: "{{ current_repo.url }}"
@@ -46,8 +46,8 @@
 - name: Configure all repositories
   ansible.hub.collection_repository:
     ah_host: "{{ hub_host }}"
-    ah_username: "{{ aap_admin_user }}"
-    ah_password: "{{ aap_admin_password }}"
+    ah_username: "{{ hub_admin_user }}"
+    ah_password: "{{ hub_admin_password }}"
     validate_certs: "{{ hub_validate_certs | default(true) }}"
     name: "{{ current_repo.name }}"
     remote: "{{ current_repo.name }}"

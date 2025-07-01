@@ -1,0 +1,11 @@
+---
+# vars file for manage_ctrl_exec_envs
+__aap_ee_images: |
+  {{ lookup('ansible.controller.controller_api', 'execution_environments',
+        host=controller_host, oauth_token=controller_token, validate_certs=aap_validate_certs, return_all=true) }}
+__aap_credential_types: |
+  {{ lookup('ansible.controller.controller_api', 'credential_types',
+        host=controller_host, oauth_token=controller_token, validate_certs=aap_validate_certs, return_all=true) }}
+__aap_credentials: |
+  {{ lookup('ansible.controller.controller_api', 'credentials',
+        host=controller_host, oauth_token=controller_token, validate_certs=aap_validate_certs, return_all=true) }}

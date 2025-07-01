@@ -1,0 +1,14 @@
+---
+# defaults file for manage_global
+aap_validate_certs: true
+
+aap_git_credential:
+  name: "Global Git Credential"
+  description: "GIT credential that can be used by any organization to access Azure Devops"
+
+# defaults for variables usually passed to the role
+controller_host: "localhost"
+controller_username: "admin"
+controller_password: ""
+azdo_pat: ""
+azdo_username: "admin"

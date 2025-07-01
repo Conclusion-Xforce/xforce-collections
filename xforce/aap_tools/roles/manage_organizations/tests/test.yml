@@ -1,0 +1,6 @@
+---
+- name: Test play for manage_global
+  hosts: localhost
+  remote_user: root
+  roles:
+    - manage_global

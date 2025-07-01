@@ -1,0 +1,35 @@
+---
+- name: Ensure LDAP configuration settings are done
+  ansible.controller.settings:
+    controller_host: "{{ controller_host }}"
+    controller_oauthtoken: "{{ controller_token }}"
+    validate_certs: "{{ controller_validate_certs }}"
+    name: "{{ cur_setting.name }}"
+    value: "{{ cur_setting.value }}"
+  loop: "{{ controller_ldap_settings }}"
+  loop_control:
+    loop_var: cur_setting
+    label: "{{ cur_setting.name }}"
+
+- name: Ensure organization and team exist
+  ansible.builtin.include_tasks:
+    file: config_ldap_organizations.yml
+  loop: "{{ organizations }}"
+  loop_control:
+    loop_var: current_org
+
+- name: Configure LDAP organization mapping
+  ansible.controller.settings:
+    controller_host: "{{ controller_host }}"
+    controller_oauthtoken: "{{ controller_token }}"
+    validate_certs: "{{ controller_validate_certs }}"
+    name: "AUTH_LDAP_ORGANIZATION_MAP"
+    value: "{{ ldap_org_map }}"
+
+- name: Configure LDAP team mapping
+  ansible.controller.settings:
+    controller_host: "{{ controller_host }}"
+    controller_oauthtoken: "{{ controller_token }}"
+    validate_certs: "{{ controller_validate_certs }}"
+    name: "AUTH_LDAP_TEAM_MAP"
+    value: "{{ ldap_team_map }}"

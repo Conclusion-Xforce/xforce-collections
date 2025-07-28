@@ -11,9 +11,9 @@ Collection: infra.ah_configuration, version '>=2.0'
 Role Variables
 --------------
 
-= hub_host: FQDN Hostname of the hub host (or VIP-name) that needs configuring
-= hub_admin_user: Username of the admin user on the hub
-- hub_admin_password: Password of the admin user on the hub
+= automationhub_host: FQDN Hostname of the hub host (or VIP-name) that needs configuring
+= automationhub_admin_user: Username of the admin user on the hub
+- automationhub_admin_password: Password of the admin user on the hub
 - hub_validate_certs: Boolean determining SSL certificate validation
 - aap_ee_registries: List of remote registries for execution images
   - = label: Label to link execution environment images to registries
@@ -28,7 +28,9 @@ Role Variables
     - label: Label to link the image to a remote registry
     = name: Name of the image within Private Automation Hub
     - description: Description of the image
+    - type: Type of container image [execution, builder, decision]
     - tags: List of tags to include for this image
+- aap_ee_namespaces: List of namespaces to protect from deletion
 - hub_ee_sync_wait: Boolean whether or not to wait for synchronization to complete.
 
 Example Playbook
@@ -39,8 +41,8 @@ Including an example of how to use your role (for instance, with variables passe
     - hosts: servers
       roles:
         - role: xforce.aap_mgmt.configure_hub_execenvs
-          hub_host: automationcontroller.example.com
-          hub_admin_user: admin
+          automationhub_host: automationcontroller.example.com
+          automationhub_admin_user: admin
           aap_ee_registries:
             - label: rh-registry
               name: "Red Hat Registry"

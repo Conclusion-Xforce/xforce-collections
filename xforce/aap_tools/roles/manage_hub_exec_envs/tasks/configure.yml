@@ -1,0 +1,34 @@
+---
+- name: Configure the registries for execution environments
+  infra.ah_configuration.ah_ee_registry:
+    ah_host: "{{ automationhub_host }}"
+    ah_username: "{{ automationhub_admin_user }}"
+    ah_password: "{{ automationhub_admin_password }}"
+    validate_certs: "{{ hub_validate_certs | default(true) }}"
+    name: "{{ current_reg.name }}"
+    url: "{{ current_reg.proto }}://{{ current_reg.host }}"
+    username: "{{ current_reg.username }}"
+    password: "{{ current_reg.password }}"
+    state: "{{ current_reg.state | default('present') }}"
+  loop: "{{ aap_ee_registries }}"
+  loop_control:
+    loop_var: current_reg
+    label: current_reg.label
+
+- name: Add the execution environments to the hub
+  infra.ah_configuration.ah_ee_repository:
+    ah_host: "{{ automationhub_host }}"
+    ah_username: "{{ automationhub_admin_user }}"
+    ah_password: "{{ automationhub_admin_password }}"
+    validate_certs: "{{ hub_validate_certs | default(true) }}"
+    name: "{{ current_ee.namespace }}/{{ current_ee.image }}"
+    description: "{{ current_ee.description }}"
+    include_tags: "{{ current_ee.tags | default(omit) }}"
+    upstream_name: "{{ current_ee.namespace }}/{{ current_ee.image }}"
+    registry: "{{ aap_ee_registries | selectattr('label', 'eq', current_ee.label) | map(attribute='name') | first }}"
+    state: "{{ current_ee.state | default('present') }}"
+  when: current_ee.label is defined
+  loop: "{{ aap_ee_images }}"
+  loop_control:
+    loop_var: current_ee
+    label: current_ee.image

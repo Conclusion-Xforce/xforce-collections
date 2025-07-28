@@ -30,7 +30,7 @@
     validate_certs: "{{ controller_validate_certs | default(true) }}"
     name: "{{ cur_setting.name }}"
     value: "{{ cur_setting.value }}"
-  loop: "{{ controller_config_settings }}"
+  loop: "{{ controller_config_settings | default([]) }}"
   loop_control:
     loop_var: cur_setting
     label: "{{ cur_setting.name }}"

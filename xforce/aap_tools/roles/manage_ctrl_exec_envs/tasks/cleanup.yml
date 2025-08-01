@@ -12,7 +12,9 @@
 - name: Print images that can be deleted
   ansible.builtin.debug:
     msg: "Image {{ cur_image }} can be deleted"
-  when: cur_image not in config_images
+  when:
+    - cur_image not in config_images
+    - (cur_image | split('/'))[1] not in aap_ee_namespaces
   loop: "{{ __aap_ee_images | map(attribute='image') }}"
   loop_control:
     loop_var: cur_image
@@ -25,7 +27,9 @@
     name: "{{ cur_image.name }}"
     image: "{{ cur_image.image }}"
     state: "absent"
-  when: cur_image.image not in config_images
+  when:
+    - cur_image not in config_images
+    - (cur_image | split('/'))[1] not in aap_ee_namespaces
   loop: "{{ __aap_ee_images }}"
   loop_control:
     loop_var: cur_image

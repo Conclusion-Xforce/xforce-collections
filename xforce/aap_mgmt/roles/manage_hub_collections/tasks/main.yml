@@ -29,7 +29,7 @@
     ah_host: "{{ hub_host }}"
     ah_username: "{{ hub_admin_user }}"
     ah_password: "{{ hub_admin_password }}"
-    validate_certs: "{{ hub_validate_certs | default(true) }}"
+    validate_certs: "{{ aap_validate_certs | default(true) }}"
     name: "{{ current_repo.name }}"
     url: "{{ current_repo.url }}"
     auth_url: "{{ current_repo.auth_url | default(omit) }}"
@@ -48,7 +48,7 @@
     ah_host: "{{ hub_host }}"
     ah_username: "{{ hub_admin_user }}"
     ah_password: "{{ hub_admin_password }}"
-    validate_certs: "{{ hub_validate_certs | default(true) }}"
+    validate_certs: "{{ aap_validate_certs | default(true) }}"
     name: "{{ current_repo.name }}"
     remote: "{{ current_repo.name }}"
     state: present

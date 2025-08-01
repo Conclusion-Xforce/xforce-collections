@@ -6,7 +6,7 @@
     password: "{{ automationhub_admin_password }}"
     method: GET
     force_basic_auth: true
-    validate_certs: "{{ hub_validate_certs | default(true) }}"
+    validate_certs: "{{ aap_validate_certs | default(true) }}"
   register: pah_images
 
 - name: Get a list of container namespaces from the PAH
@@ -16,7 +16,7 @@
     password: "{{ automationhub_admin_password }}"
     method: GET
     force_basic_auth: true
-    validate_certs: "{{ hub_validate_certs | default(true) }}"
+    validate_certs: "{{ aap_validate_certs | default(true) }}"
   register: pah_namespaces
 
 - name: Create a list of execution environments that should exist
@@ -42,7 +42,7 @@
     ah_host: "{{ automationhub_host }}"
     ah_username: "{{ automationhub_admin_user }}"
     ah_password: "{{ automationhub_admin_password }}"
-    validate_certs: "{{ hub_validate_certs | default(true) }}"
+    validate_certs: "{{ aap_validate_certs | default(true) }}"
     name: "{{ cur_image['name'] }}"
     state: absent
   when:

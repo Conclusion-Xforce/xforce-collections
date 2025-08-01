@@ -15,7 +15,7 @@ Role Variables
 = hub_admin_user: Username of the admin user on the hub
 = hub_admin_password: Password of the admin user on the hub
 = hub_redhat_token: API Access token for Red Hat supported collection download, to be created at console.redhat.com
-- hub_validate_certs: Boolean determining SSL certificate validation
+- aap_validate_certs: Boolean determining SSL certificate validation
 - hub_remote_repos: List dictionaries holding remote sources for repositories
     - = name: Name of the collection repository in the hub
       = url: Url to the remote source of the repository

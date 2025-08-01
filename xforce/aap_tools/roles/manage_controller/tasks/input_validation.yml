@@ -1,0 +1,18 @@
+---
+- name: Check that a controller host is specified
+  ansible.builtin.assert:
+    that: controller_host | default('') | length
+    fail_msg: "No controller_host defined; aborting"
+    success_msg: "controller_host set to {{ controller_host }}"
+
+- name: Check that a controller admin user is specified
+  ansible.builtin.assert:
+    that: controller_admin_user | default('') | length
+    fail_msg: "No controller_admin_user defined; aborting"
+    success_msg: "controller_admin_user set to {{ controller_admin_user }}"
+
+- name: Check that a controller admin password is specified
+  ansible.builtin.assert:
+    that: controller_admin_password | default('') | length
+    fail_msg: "No controller_admin_password defined; aborting"
+    success_msg: "controller_admin_password defined"

@@ -1,16 +1,8 @@
 ---
 # tasks file for manage_controller
-- name: Check that a controller host is specified
-  ansible.builtin.assert:
-    that: controller_host | default('') | length
-    fail_msg: "No controller_host defined; aborting"
-    success_msg: "Controller_host set to {{ controller_host }}"
-
-- name: Check that a controller admin user is specified
-  ansible.builtin.assert:
-    that: controller_admin_user | default('') | length
-    fail_msg: "No controller_admin_user defined; aborting"
-    success_msg: "Controller_admin_user set to {{ controller_admin_user }}"
+- name: Perform input variable validation
+  ansible.builtin.include_tasks:
+    file: input_validation.yml
 
 - name: Retrieve authentication token from controller using username/password
   ansible.controller.token:
@@ -57,7 +49,7 @@
     unified_job_template: "{{ cur_schedule.template }}"
     rrule: "{{ cur_schedule.rrule | default(omit) }}"
     extra_data: "{{ cur_schedule.extra_data | default(omit) }}"
-  loop: "{{ cleanup_management_jobs }}"
+  loop: "{{ cleanup_management_jobs | default([]) }}"
   loop_control:
     loop_var: cur_schedule
     label: "{{ cur_schedule.name }}"

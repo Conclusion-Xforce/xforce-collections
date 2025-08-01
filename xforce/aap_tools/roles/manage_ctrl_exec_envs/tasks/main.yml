@@ -1,5 +1,5 @@
 ---
-# tasks file for manage_hub_exec_envs
+# tasks file for manage_ctrl_exec_envs
 - name: Perform input variable validation
   ansible.builtin.include_tasks:
     file: input_validation.yml
@@ -13,15 +13,15 @@
     scope: "write"
     state: present
     validate_certs: "{{ aap_validate_certs }}"
-  no_log: true
+#   no_log: true
 
 - name: Configure execution environments
   ansible.builtin.include_tasks:
     file: configure.yml
 
-- name: Cleanup execution environments we do not need
-  ansible.builtin.include_tasks:
-    file: cleanup.yml
+# - name: Cleanup execution environments we do not need
+#   ansible.builtin.include_tasks:
+#     file: cleanup.yml
 
 - name: Delete the authentication token with the token we created
   ansible.controller.token:

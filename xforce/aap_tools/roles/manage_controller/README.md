@@ -1,4 +1,4 @@
-xforce.aap_tools.configure_controller
+xforce.aap_tools.manage_controller
 =========
 
 Role to perform global Ansible Automation Controller configuration.
@@ -19,7 +19,17 @@ Role Variables
     - name: Name of the setting (consult the controller api for the exact name)
       value: Value of the setting
 - controller_instance_groups: Dictionary of instance groups and their instances on the controller
-
+- cleanup_management_jobs: List of cleanup jobs with schedules
+    - name: Name of the cleanup job
+    - template: Job template for the cleanup job
+    - rrule: Scheduling rrule
+    - extra_data: Possible extra data for this job
+- aap_global_credentials: List of global general-purpose credentials
+    - name: Name of the credential
+    - description: Description for the credential
+    - organization: Name of the organization to which the credential belongs
+    - credential_type: Credential type
+    - inputs: Parameters for the credential like username, password etc
 
 Example Playbook
 ----------------

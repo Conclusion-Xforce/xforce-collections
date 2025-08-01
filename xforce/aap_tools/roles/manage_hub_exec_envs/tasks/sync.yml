@@ -4,7 +4,7 @@
     ah_host: "{{ automationhub_host }}"
     ah_username: "{{ automationhub_admin_user }}"
     ah_password: "{{ automationhub_admin_password }}"
-    validate_certs: "{{ hub_validate_certs | default(true) }}"
+    validate_certs: "{{ aap_validate_certs | default(true) }}"
     name: "{{ current_reg.name }}"
     wait: "{{ hub_ee_sync_wait }}"
   when: current_reg.state | default('present') == "present"
@@ -18,7 +18,7 @@
     ah_host: "{{ automationhub_host }}"
     ah_username: "{{ automationhub_admin_user }}"
     ah_password: "{{ automationhub_admin_password }}"
-    validate_certs: "{{ hub_validate_certs | default(true) }}"
+    validate_certs: "{{ aap_validate_certs | default(true) }}"
     name: "{{ current_ee.namespace }}/{{ current_ee.image }}"
     wait: "{{ hub_ee_sync_wait }}"
   when:

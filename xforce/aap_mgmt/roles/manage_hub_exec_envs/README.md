@@ -14,7 +14,7 @@ Role Variables
 = hub_host: FQDN Hostname of the hub host (or VIP-name) that needs configuring
 = hub_admin_user: Username of the admin user on the hub
 - hub_admin_password: Password of the admin user on the hub
-- hub_validate_certs: Boolean determining SSL certificate validation
+- aap_validate_certs: Boolean determining SSL certificate validation
 - aap_ee_registries: List of remote registries for execution images
   - = label: Label to link execution environment images to registries
     = name: Name of the registry within Private Automation Hub

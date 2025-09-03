@@ -4,7 +4,7 @@
     config_images: >
       {{ config_images | default([]) +
       [hub_host + '/' + current_ee.namespace + '/' + current_ee.image + ':' + current_ee.tag | default('latest')] }}
-  loop: "{{ hub_ee_images }}"
+  loop: "{{ hub_ee_images | selectattr('type', 'eq', 'execution') }}"
   loop_control:
     loop_var: current_ee
     label: "{{ current_ee.image }}"
@@ -30,7 +30,6 @@
   when:
     - cur_image not in config_images
     - (cur_image | split('/'))[1] not in aap_ee_namespaces
-  loop: "{{ __aap_ee_images }}"
+  loop: "{{ __aap_ee_images | map(attribute='image') }}"
   loop_control:
     loop_var: cur_image
-    label: "{{ cur_image.image }}"

@@ -1,7 +1,9 @@
 xforce.aap_tools.manage_hub_collections
 =========
 
-Role to manage the collection repositories on Ansible Private Automation Hub.
+Role to manage the remote collection repositories on Ansible Private Automation Hub. It will create the
+remote definitions of collection repositories as defined in the hub_remote_repos variable. It is up to
+the calling playbook to ensure that e.g. proper tokens for the remote repositories are provided.
 
 Requirements
 ------------
@@ -11,20 +13,20 @@ Collection: ansible.hub, version '>=1.0.0'
 Role Variables
 --------------
 
-= hub_host: FQDN Hostname of the hub host (or VIP-name) that needs configuring
-= hub_admin_user: Username of the admin user on the hub
-= hub_admin_password: Password of the admin user on the hub
-= hub_redhat_token: API Access token for Red Hat supported collection download, to be created at console.redhat.com
+= platform_host: FQDN Hostname of the Platform Gateway host (or VIP-name)
+= automationhub_admin_user: Username of an admin user on the Private Automation Hub
+= automationhub_admin_password: Password of the admin user on the Private Automation Hub
 - aap_validate_certs: Boolean determining SSL certificate validation
-- hub_remote_repos: List dictionaries holding remote sources for repositories
+- aap_proxy_url: Url of a http-proxy to be used to access remote sources
+- aap_proxy_username: Username for authentication to the http-proxy
+- aap_proxy_password: Password for authentication to the http-proxy
+
+- hub_remote_repos: List of dictionaries holding remote sources for repositories
     - = name: Name of the collection repository in the hub
       = url: Url to the remote source of the repository
       - auth_url: Separate authentication url
       - token: Authentication token for the remote source
       - requirements: List of collections to mirror to the hub - applicable on the Community repo (galaxy.ansible.com)
-- hub_proxy_url: Url of a http-proxy to be used to access remote sources
-- hub_proxy_username: Username for authentication to the http-proxy
-- hub_proxy_password: Password for authentication to the http-proxy
 - hub_reposync_wait: Boolean determining waiting for collection repository syncing
 
 Example Playbook

@@ -1,83 +1,13 @@
 ---
 # tasks file for manage_hub_exec_envs
-- name: Check that a hub host is specified
-  ansible.builtin.assert:
-    that: hub_host | default('') | length
-    fail_msg: "No hub_host defined; aborting"
-    success_msg: "hub_host set to {{ hub_host }}"
+- name: Perform input variable validation
+  ansible.builtin.include_tasks:
+    file: validate_input.yml
 
-- name: Check that a hub admin user is specified
-  ansible.builtin.assert:
-    that: hub_admin_user | default('') | length
-    fail_msg: "No hub_admin_user defined; aborting"
-    success_msg: "hub_admin_user set to {{ hub_admin_user }}"
+- name: Configure execution environment repositories
+  ansible.builtin.include_tasks:
+    file: configure.yml
 
-- name: Check that a hub admin password is specified
-  ansible.builtin.assert:
-    that: hub_admin_password | default('') | length
-    fail_msg: "No hub_admin_password defined; aborting"
-    success_msg: "hub_admin_password defined"
-
-- name: Configure the registries for execution environments
-  ansible.hub.ah_ee_registry:
-    ah_host: "{{ hub_host }}"
-    ah_username: "{{ hub_admin_user }}"
-    ah_password: "{{ hub_admin_password }}"
-    validate_certs: "{{ aap_validate_certs | default(true) }}"
-    name: "{{ current_reg.name }}"
-    url: "{{ current_reg.proto }}://{{ current_reg.host }}"
-    username: "{{ current_reg.username }}"
-    password: "{{ current_reg.password }}"
-    state: "{{ current_reg.state | default('present') }}"
-  loop: "{{ aap_ee_registries }}"
-  loop_control:
-    loop_var: current_reg
-    label: current_reg.label
-
-- name: Add the execution environments to the hub
-  ansible.hub.ah_ee_repository:
-    ah_host: "{{ hub_host }}"
-    ah_username: "{{ hub_admin_user }}"
-    ah_password: "{{ hub_admin_password }}"
-    validate_certs: "{{ aap_validate_certs | default(true) }}"
-    name: "{{ current_ee.namespace }}/{{ current_ee.image }}"
-    description: "{{ current_ee.description }}"
-    include_tags: "{{ current_ee.tags | default(omit) }}"
-    upstream_name: "{{ current_ee.namespace }}/{{ current_ee.image }}"
-    registry: "{{ aap_ee_registries | selectattr('label', 'eq', current_ee.label) | map(attribute='name') | first }}"
-    state: "{{ current_ee.state | default('present') }}"
-  when: current_ee.label is defined
-  loop: "{{ aap_ee_images }}"
-  loop_control:
-    loop_var: current_ee
-    label: current_ee.image
-
-- name: Sync the registries
-  ansible.hub.ah_ee_registry_sync:
-    ah_host: "{{ hub_host }}"
-    ah_username: "{{ hub_admin_user }}"
-    ah_password: "{{ hub_admin_password }}"
-    validate_certs: "{{ aap_validate_certs | default(true) }}"
-    name: "{{ current_reg.name }}"
-    wait: "{{ hub_ee_sync_wait }}"
-  when: current_reg.state | default('present') == "present"
-  loop: "{{ aap_ee_registries }}"
-  loop_control:
-    loop_var: current_reg
-    label: current_reg.label
-
-- name: Sync the execution environments on the hub
-  ansible.hub.ah_ee_repository_sync:
-    ah_host: "{{ hub_host }}"
-    ah_username: "{{ hub_admin_user }}"
-    ah_password: "{{ hub_admin_password }}"
-    validate_certs: "{{ aap_validate_certs | default(true) }}"
-    name: "{{ current_ee.namespace }}/{{ current_ee.image }}"
-    wait: "{{ hub_ee_sync_wait }}"
-  when:
-    - current_ee.label is defined
-    - current_ee.state | default('present') == "present"
-  loop: "{{ aap_ee_images }}"
-  loop_control:
-    loop_var: current_ee
-    label: current_ee.image
+- name: Sync execution environment repositories
+  ansible.builtin.include_tasks:
+    file: sync.yml

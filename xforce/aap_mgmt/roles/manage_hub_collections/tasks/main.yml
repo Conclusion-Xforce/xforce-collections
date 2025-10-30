@@ -18,18 +18,11 @@
     fail_msg: "No automationhub_admin_password defined; aborting"
     success_msg: "automationhub_admin_password defined"
 
-- name: Create a new token for future HUB actions
-  ansible.hub.ah_token:
-    state: present
-    ah_host: "{{ platform_host }}"
-    ah_username: "{{ automationhub_admin_user }}"
-    ah_password: "{{ automationhub_admin_password }}"
-  no_log: true
-
 - name: Configure all remotes
   ansible.hub.collection_remote:
     ah_host: "{{ platform_host }}"
-    ah_token: "{{ ah_token }}"
+    ah_username: "{{ automationhub_admin_user }}"
+    ah_password: "{{ automationhub_admin_password }}"
     validate_certs: "{{ aap_validate_certs | default(true) }}"
     name: "{{ current_repo.name }}"
     url: "{{ current_repo.url }}"
@@ -40,27 +33,21 @@
     proxy_username: "{{ aap_proxy_username | default(omit) }}"
     proxy_password: "{{ aap_proxy_password | default(omit) }}"
     state: "{{ current_repo.state | default('present') }}"
-  loop: "{{ hub_remote_repos | default([]) }}"
+  loop: "{{ aap_collection_repos | default([]) }}"
   loop_control:
     loop_var: current_repo
 
 - name: Configure all repositories
   ansible.hub.collection_repository:
     ah_host: "{{ platform_host }}"
-    ah_token: "{{ ah_token }}"
+    ah_username: "{{ automationhub_admin_user }}"
+    ah_password: "{{ automationhub_admin_password }}"
     validate_certs: "{{ aap_validate_certs | default(true) }}"
     name: "{{ current_repo.name }}"
     remote: "{{ current_repo.name }}"
     state: "{{ current_repo.state | default('present') }}"
     update_repo: true
     wait: "{{ hub_reposync_wait }}"
-  loop: "{{ hub_remote_repos | default([]) }}"
+  loop: "{{ aap_collection_repos | default([]) }}"
   loop_control:
     loop_var: current_repo
-
-- name: Delete the auth token
-  ansible.hub.ah_token:
-    ah_host: "{{ platform_host }}"
-    ah_token: "{{ ah_token }}"
-    state: absent
-  no_log: true

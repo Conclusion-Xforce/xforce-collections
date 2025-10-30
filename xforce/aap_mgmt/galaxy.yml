@@ -50,6 +50,7 @@ dependencies:
   community.general: '>=9.0.0'
   ansible.controller: '>=4.6.0'
   ansible.hub: '>=1.0.0'
+  ansible.platform: '>=2.5.0'
 
 # The URL of the originating SCM repository
 repository: https://github.com/Alex-Bron/xforce-collections

@@ -34,4 +34,4 @@ aap_ee_images:
     name: Default decision environment - RHEL-8
     description: Red Hat Ansible Automation Platform Supported Decision Environment on RHEL-8
 
-hub_ee_sync_wait: false
+aap_ee_sync_wait: false

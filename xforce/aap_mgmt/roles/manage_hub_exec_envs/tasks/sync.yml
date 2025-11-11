@@ -6,7 +6,7 @@
     ah_password: "{{ automationhub_admin_password }}"
     validate_certs: "{{ aap_validate_certs | default(true) }}"
     name: "{{ current_reg.name }}"
-    wait: "{{ hub_ee_sync_wait }}"
+    wait: "{{ aap_ee_sync_wait }}"
   when: current_reg.state | default('present') == "present"
   loop: "{{ aap_container_registries }}"
   loop_control:
@@ -20,7 +20,7 @@
     ah_password: "{{ automationhub_admin_password }}"
     validate_certs: "{{ aap_validate_certs | default(true) }}"
     name: "{{ current_ee.namespace }}/{{ current_ee.image }}"
-    wait: "{{ hub_ee_sync_wait }}"
+    wait: "{{ aap_ee_sync_wait }}"
   when:
     - current_ee.registry is defined
     - current_ee.state | default('present') == "present"

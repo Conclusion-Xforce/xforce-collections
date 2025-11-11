@@ -27,7 +27,7 @@ Role Variables
     - auth_url: Separate authentication url
     - token: Authentication token for the remote source
     - requirements: List of collections to mirror to the hub - applicable on the Community repo (galaxy.ansible.com)
-- hub_reposync_wait: Boolean determining waiting for collection repository syncing
+- aap_reposync_wait: Boolean determining waiting for collection repository syncing
 
 Example Playbook
 ----------------

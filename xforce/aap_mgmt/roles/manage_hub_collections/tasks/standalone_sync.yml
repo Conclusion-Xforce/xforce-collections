@@ -4,10 +4,6 @@
   ansible.builtin.include_tasks:
     file: validate_input.yml
 
-- name: Configure collection repositories
-  ansible.builtin.include_tasks:
-    file: configure.yml
-
 - name: Sync collection repositories
   ansible.builtin.include_tasks:
     file: sync.yml

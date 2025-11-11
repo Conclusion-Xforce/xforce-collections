@@ -1,0 +1,35 @@
+---
+- name: Configure all remotes
+  ansible.hub.collection_remote:
+    ah_host: "{{ platform_host }}"
+    ah_username: "{{ automationhub_admin_user }}"
+    ah_password: "{{ automationhub_admin_password }}"
+    validate_certs: "{{ aap_validate_certs | default(true) }}"
+    name: "{{ current_repo.name }}"
+    url: "{{ current_repo.url }}"
+    auth_url: "{{ current_repo.auth_url | default(omit) }}"
+    token: "{{ current_repo.token | default(omit) }}"
+    requirements: "{{ current_repo.requirements | default(omit) }}"
+    proxy_url: "{{ aap_proxy_url | default(omit) }}"
+    proxy_username: "{{ aap_proxy_username | default(omit) }}"
+    proxy_password: "{{ aap_proxy_password | default(omit) }}"
+    state: "{{ current_repo.state | default('present') }}"
+  loop: "{{ aap_collection_repos | default([]) }}"
+  loop_control:
+    loop_var: current_repo
+    label: "{{ current_repo.name }}"
+
+- name: Configure all repositories
+  ansible.hub.collection_repository:
+    ah_host: "{{ platform_host }}"
+    ah_username: "{{ automationhub_admin_user }}"
+    ah_password: "{{ automationhub_admin_password }}"
+    validate_certs: "{{ aap_validate_certs | default(true) }}"
+    name: "{{ current_repo.name }}"
+    remote: "{{ current_repo.name }}"
+    state: "{{ current_repo.state | default('present') }}"
+    update_repo: false
+  loop: "{{ aap_collection_repos | default([]) }}"
+  loop_control:
+    loop_var: current_repo
+    label: "{{ current_repo.name }}"

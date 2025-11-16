@@ -2,8 +2,8 @@
 - name: Sync the registries
   ansible.hub.ah_ee_registry_sync:
     ah_host: "{{ platform_host }}"
-    ah_username: "{{ automationhub_admin_user }}"
-    ah_password: "{{ automationhub_admin_password }}"
+    ah_username: "{{ aap_admin_user }}"
+    ah_password: "{{ aap_admin_password }}"
     validate_certs: "{{ aap_validate_certs | default(true) }}"
     name: "{{ current_reg.name }}"
     wait: "{{ aap_ee_sync_wait }}"
@@ -16,8 +16,8 @@
 - name: Sync the execution environments on the hub
   ansible.hub.ah_ee_repository_sync:
     ah_host: "{{ platform_host }}"
-    ah_username: "{{ automationhub_admin_user }}"
-    ah_password: "{{ automationhub_admin_password }}"
+    ah_username: "{{ aap_admin_user }}"
+    ah_password: "{{ aap_admin_password }}"
     validate_certs: "{{ aap_validate_certs | default(true) }}"
     name: "{{ current_ee.namespace }}/{{ current_ee.image }}"
     wait: "{{ aap_ee_sync_wait }}"

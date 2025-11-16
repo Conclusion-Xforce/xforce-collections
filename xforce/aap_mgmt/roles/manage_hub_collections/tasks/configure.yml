@@ -2,8 +2,8 @@
 - name: Configure all remotes
   ansible.hub.collection_remote:
     ah_host: "{{ platform_host }}"
-    ah_username: "{{ automationhub_admin_user }}"
-    ah_password: "{{ automationhub_admin_password }}"
+    ah_username: "{{ aap_admin_user }}"
+    ah_password: "{{ aap_admin_password }}"
     validate_certs: "{{ aap_validate_certs | default(true) }}"
     name: "{{ current_repo.name }}"
     url: "{{ current_repo.url }}"
@@ -22,8 +22,8 @@
 - name: Configure all repositories
   ansible.hub.collection_repository:
     ah_host: "{{ platform_host }}"
-    ah_username: "{{ automationhub_admin_user }}"
-    ah_password: "{{ automationhub_admin_password }}"
+    ah_username: "{{ aap_admin_user }}"
+    ah_password: "{{ aap_admin_password }}"
     validate_certs: "{{ aap_validate_certs | default(true) }}"
     name: "{{ current_repo.name }}"
     remote: "{{ current_repo.name }}"

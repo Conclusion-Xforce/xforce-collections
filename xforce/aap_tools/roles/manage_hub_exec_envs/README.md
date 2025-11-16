@@ -12,8 +12,8 @@ Role Variables
 --------------
 
 = automationhub_host: FQDN Hostname of the hub host (or VIP-name) that needs configuring
-= automationhub_admin_user: Username of the admin user on the hub
-- automationhub_admin_password: Password of the admin user on the hub
+= aap_admin_user: Username of the admin user on the hub
+- aap_admin_password: Password of the admin user on the hub
 - aap_validate_certs: Boolean determining SSL certificate validation
 - aap_ee_registries: List of remote registries for execution images
   - = label: Label to link execution environment images to registries
@@ -42,7 +42,7 @@ Including an example of how to use your role (for instance, with variables passe
       roles:
         - role: xforce.aap_mgmt.configure_hub_execenvs
           automationhub_host: automationcontroller.example.com
-          automationhub_admin_user: admin
+          aap_admin_user: admin
           aap_ee_registries:
             - label: rh-registry
               name: "Red Hat Registry"

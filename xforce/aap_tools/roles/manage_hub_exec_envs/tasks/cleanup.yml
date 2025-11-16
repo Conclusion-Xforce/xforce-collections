@@ -2,8 +2,8 @@
 - name: Get a list of execution environments from the PAH
   ansible.builtin.uri:
     url: "https://{{ automationhub_host }}/{{ __api_containers }}"
-    user: "{{ automationhub_admin_user }}"
-    password: "{{ automationhub_admin_password }}"
+    user: "{{ aap_admin_user }}"
+    password: "{{ aap_admin_password }}"
     method: GET
     force_basic_auth: true
     validate_certs: "{{ aap_validate_certs | default(true) }}"
@@ -12,8 +12,8 @@
 - name: Get a list of container namespaces from the PAH
   ansible.builtin.uri:
     url: "https://{{ automationhub_host }}/{{ __api_container_namespaces }}"
-    user: "{{ automationhub_admin_user }}"
-    password: "{{ automationhub_admin_password }}"
+    user: "{{ aap_admin_user }}"
+    password: "{{ aap_admin_password }}"
     method: GET
     force_basic_auth: true
     validate_certs: "{{ aap_validate_certs | default(true) }}"
@@ -40,8 +40,8 @@
 - name: Remove the execution environments from the hub that should not exist
   infra.ah_configuration.ah_ee_repository:
     ah_host: "{{ automationhub_host }}"
-    ah_username: "{{ automationhub_admin_user }}"
-    ah_password: "{{ automationhub_admin_password }}"
+    ah_username: "{{ aap_admin_user }}"
+    ah_password: "{{ aap_admin_password }}"
     validate_certs: "{{ aap_validate_certs | default(true) }}"
     name: "{{ cur_image['name'] }}"
     state: absent

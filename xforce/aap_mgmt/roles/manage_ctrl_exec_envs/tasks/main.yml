@@ -1,0 +1,21 @@
+---
+# tasks file for manage_hub_exec_envs
+- name: Perform input variable validation
+  ansible.builtin.include_tasks:
+    file: validate_input.yml
+
+- name: Retrieve a token from Automation Platform
+  ansible.builtin.include_tasks:
+    file: login.yml
+
+- name: Configure execution environments
+  ansible.builtin.include_tasks:
+    file: configure.yml
+
+- name: Cleanup execution environments we do not need
+  ansible.builtin.include_tasks:
+    file: cleanup.yml
+
+- name: Destroy the token from Automation Platform
+  ansible.builtin.include_tasks:
+    file: logout.yml

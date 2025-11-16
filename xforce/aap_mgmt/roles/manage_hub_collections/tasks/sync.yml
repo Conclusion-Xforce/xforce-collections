@@ -2,8 +2,8 @@
 - name: Sync all repositories
   ansible.hub.collection_repository_sync:
     ah_host: "{{ platform_host }}"
-    ah_username: "{{ automationhub_admin_user }}"
-    ah_password: "{{ automationhub_admin_password }}"
+    ah_username: "{{ aap_admin_user }}"
+    ah_password: "{{ aap_admin_password }}"
     validate_certs: "{{ aap_validate_certs | default(true) }}"
     name: "{{ current_repo.name }}"
     wait: "{{ aap_reposync_wait }}"

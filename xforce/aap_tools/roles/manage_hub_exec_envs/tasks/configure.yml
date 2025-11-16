@@ -2,8 +2,8 @@
 - name: Configure the registries for execution environments
   infra.ah_configuration.ah_ee_registry:
     ah_host: "{{ automationhub_host }}"
-    ah_username: "{{ automationhub_admin_user }}"
-    ah_password: "{{ automationhub_admin_password }}"
+    ah_username: "{{ aap_admin_user }}"
+    ah_password: "{{ aap_admin_password }}"
     validate_certs: "{{ aap_validate_certs | default(true) }}"
     name: "{{ current_reg.name }}"
     url: "{{ current_reg.proto }}://{{ current_reg.host }}"
@@ -18,8 +18,8 @@
 - name: Add the execution environments to the hub
   infra.ah_configuration.ah_ee_repository:
     ah_host: "{{ automationhub_host }}"
-    ah_username: "{{ automationhub_admin_user }}"
-    ah_password: "{{ automationhub_admin_password }}"
+    ah_username: "{{ aap_admin_user }}"
+    ah_password: "{{ aap_admin_password }}"
     validate_certs: "{{ aap_validate_certs | default(true) }}"
     name: "{{ current_ee.namespace }}/{{ current_ee.image }}"
     description: "{{ current_ee.description }}"

@@ -22,8 +22,19 @@ Collection: ansible.hub, version '>=1.0.0'
     - ***name***: Name of the collection repository in the hub
     - ***url***: Url to the remote source of the repository
     - auth_url: Separate authentication url
+    - password: Password to authenticate to the remote repository
     - token: Authentication token for the remote source
     - requirements: List of collections to mirror to the hub - applicable on the Community repo (galaxy.ansible.com)
+    - download_concurrency: Number of concurrent collections to download (default: 10)
+    - max_retries: Retries to use when running sync (default: 0)
+    - rate_limit: Limits total download rate in requests per second
+    - request_timeout: Specify the timeout Ansible should use in requests to the Hub
+    - signed_only: Whether to only download signed collections (default: false)
+    - sync_dependencies: Whether to download dependencies when syncing collections (default: true)
+    - description: Description for the collection repository
+    - interval: The interval to request an update from the Hub
+    - private: Make the repository private (default: false)
+    - retain_repo_versions
 - aap_reposync_wait: Boolean determining waiting for collection repository syncing
 
 ## Example Playbook

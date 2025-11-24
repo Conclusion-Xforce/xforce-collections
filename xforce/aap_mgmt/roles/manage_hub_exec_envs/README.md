@@ -1,10 +1,34 @@
-# xforce.aap_mgmt.manage_hub_execenvs
+# xforce.aap_mgmt.manage_hub_exec_envs
 
-Role to manage the execution and decision environment on Ansible Private Automation Hub. It will
-create the remote registry definitions for the container images as defined in the aap_container_registries
-variable, and it will create the container image definitions as defined in the aap_container_images
-variable. It is up to the calling playbook to ensure that e.g. proper tokens for the remote repositories
-are provided.
+The role manage_hub_exec_envs is used to configure the execution environment repositories in Ansible Automation Platform. It contains three tasks: validate_input, configure, and sync.
+
+The configure task configures the registries for execution environments by using the ah_ee_registry module. It loops through the aap_container_registries list and sets the name, URL, username, password, proxy_url, proxy_username, proxy_password, and state for each registry.
+
+Next it adds the execution environments to the hub by using the ah_ee_repository module. It loops through the aap_container_images list and sets the name, description, include_tags, exclude_tags, upstream_name, registry, and state for each execution environment.
+
+The sync task syncs the registries and execution environments on the hub by using the ah_ee_registry_sync and ah_ee_repository_sync modules. It loops through the aap_container_registries list and aap_container_images list to sync each registry and execution environment.
+
+The validate_input task checks that a hub host is specified, a hub admin user is specified, and a hub admin password is specified.
+
+Entrypoint for the role is either the main.yml or the standalone_sync.yml task file.
+
+- main.yml is used when configuring execution environments
+
+Usage:
+```
+tasks:
+  - ansible.builtin.include_role:
+      name: xforce.aap_mgmt.manage_hub_exec_envs
+```
+- standalone_sync.yml is used when only the syncing of repositories and images is requested
+
+Usage:
+```
+tasks:
+  - ansible.builtin.include_role:
+      name: xforce.aap_mgmt.manage_hub_exec_envs
+      tasks_from: standalone_sync.yml
+```
 
 # Requirements
 

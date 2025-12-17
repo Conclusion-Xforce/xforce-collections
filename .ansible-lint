@@ -1,0 +1,21 @@
+---
+# exclude_paths included in this file are parsed relative to this file's location
+# and not relative to the CWD of execution. CLI arguments passed to the --exclude
+# option are parsed relative to the CWD of execution.
+exclude_paths:
+  - xforce/aap_mgmt/roles/*/tests/
+  - xforce/aap_tools/roles/*/tests/
+# parseable: true
+# quiet: true
+# strict: true
+# verbosity: 1
+
+use_default_rules: true
+# Load custom rules from this specific folder
+# rulesdir:
+#   - ./rule/directory/
+
+skip_list:
+  - name[template]
+  - var-naming[no-role-prefix]
+  - meta-runtime[unsupported-version]

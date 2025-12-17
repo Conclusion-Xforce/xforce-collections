@@ -1,14 +1,7 @@
-# 
+#
 *.retry
-.ansible_vault
-.ansible-lint
-ansible.cfg
-ansible-navigator.log
-ansible-navigator.yml
-*-artifact-*.json
-collections/*
-!collections/requirements.yml
-playbook-runs/
+.ansible/
+.cache
 
 # No collection tar-balls please
 */*/*.tar.gz

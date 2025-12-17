@@ -1,0 +1,30 @@
+---
+- name: Sync the registries
+  ansible.hub.ah_ee_registry_sync:
+    ah_host: "{{ platform_host }}"
+    ah_username: "{{ aap_admin_user }}"
+    ah_password: "{{ aap_admin_password }}"
+    validate_certs: "{{ aap_validate_certs | default(true) }}"
+    name: "{{ current_reg.name }}"
+    wait: "{{ aap_ee_sync_wait }}"
+  when: current_reg.state | default('present') == "present"
+  loop: "{{ aap_container_registries }}"
+  loop_control:
+    loop_var: current_reg
+    label: "{{ current_reg.registry }}"
+
+- name: Sync the execution environments on the hub
+  ansible.hub.ah_ee_repository_sync:
+    ah_host: "{{ platform_host }}"
+    ah_username: "{{ aap_admin_user }}"
+    ah_password: "{{ aap_admin_password }}"
+    validate_certs: "{{ aap_validate_certs | default(true) }}"
+    name: "{{ current_ee.namespace }}/{{ current_ee.image }}"
+    wait: "{{ aap_ee_sync_wait }}"
+  when:
+    - current_ee.registry is defined
+    - current_ee.state | default('present') == "present"
+  loop: "{{ aap_container_images }}"
+  loop_control:
+    loop_var: current_ee
+    label: "{{ current_ee.image }}"

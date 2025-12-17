@@ -1,0 +1,38 @@
+---
+- name: Configure the registries for execution environments
+  ansible.hub.ah_ee_registry:
+    ah_host: "{{ platform_host }}"
+    ah_username: "{{ aap_admin_user }}"
+    ah_password: "{{ aap_admin_password }}"
+    validate_certs: "{{ aap_validate_certs | default(true) }}"
+    name: "{{ current_reg.name }}"
+    url: "{{ current_reg.proto }}://{{ current_reg.host }}"
+    username: "{{ current_reg.username }}"
+    password: "{{ current_reg.password }}"
+    proxy_url: "{{ aap_proxy_url | default(omit) }}"
+    proxy_username: "{{ aap_proxy_username | default(omit) }}"
+    proxy_password: "{{ aap_proxy_password | default(omit) }}"
+    state: "{{ current_reg.state | default('present') }}"
+  loop: "{{ aap_container_registries }}"
+  loop_control:
+    loop_var: current_reg
+    label: "{{ current_reg.registry }}"
+
+- name: Add the execution environments to the hub
+  ansible.hub.ah_ee_repository:
+    ah_host: "{{ platform_host }}"
+    ah_username: "{{ aap_admin_user }}"
+    ah_password: "{{ aap_admin_password }}"
+    validate_certs: "{{ aap_validate_certs | default(true) }}"
+    name: "{{ current_ee.namespace }}/{{ current_ee.image }}"
+    description: "{{ current_ee.description }}"
+    include_tags: "{{ current_ee.tags | default(omit) }}"
+    exclude_tags: "{{ current_ee.skip_tags | default(omit) }}"
+    upstream_name: "{{ current_ee.namespace }}/{{ current_ee.image }}"
+    registry: "{{ aap_container_registries | selectattr('registry', 'eq', current_ee.registry) | map(attribute='name') | first }}"
+    state: "{{ current_ee.state | default('present') }}"
+  when: current_ee.registry is defined
+  loop: "{{ aap_container_images }}"
+  loop_control:
+    loop_var: current_ee
+    label: "{{ current_ee.image }}"

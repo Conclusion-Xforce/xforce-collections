@@ -1,15 +1,7 @@
 ---
-# defaults file for manage_controller
-controller_token_description: "Authentication token for AAP configuration"
-
-controller_config_settings:
-  - name: "REMOTE_HOST_HEADERS"
-    value:
-      - "REMOTE_ADDR"
-      - "REMOTE_HOST"
-      - "HTTP_X_FORWARDED_FOR"
-
-aap_ee_images:
+# defaults file for manage_ctrl_exec_envs
+aap_main_url: platform.example.com
+aap_container_images:
   - namespace: ansible-automation-platform-25
     image: ee-supported-rhel9
     label: rh-registry
@@ -34,5 +26,7 @@ aap_ee_images:
     label: rh-registry
     name: Default decision environment - RHEL-8
     description: Red Hat Ansible Automation Platform Supported Decision Environment on RHEL-8
-
-aap_control_plane_ee: ansible-automation-platform-25/ee-supported-rhel9
+aap_container_namespaces: []
+aap_ee_sync_wait: false
+aap_reserved_images:
+  - Control Plane Execution Environment

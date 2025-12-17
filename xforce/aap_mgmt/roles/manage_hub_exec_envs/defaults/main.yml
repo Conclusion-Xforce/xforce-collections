@@ -1,6 +1,6 @@
 ---
 # defaults file for manage_hub_exec_envs
-aap_ee_registries:
+aap_container_registries:
   - label: rh-registry
     name: "Red Hat Registry"
     host: registry.redhat.io
@@ -8,7 +8,7 @@ aap_ee_registries:
     username: "registry_user"
     password: "registry_token"
 
-aap_ee_images:
+aap_container_images:
   - namespace: ansible-automation-platform-25
     image: ee-supported-rhel9
     label: rh-registry

@@ -1,4 +1,4 @@
-# xforce.aap_tools.manage_hub_collections
+# xforce.aap_mgmt.manage_hub_collections
 
 Role to manage the remote collection repositories on Ansible Private Automation Hub. It will create the
 remote definitions of collection repositories as defined in the aap_collection_repos variable. It is up to

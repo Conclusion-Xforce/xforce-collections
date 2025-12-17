@@ -1,4 +1,4 @@
-# schiphol.management.manage_ctrl_exec_envs
+# xforce.aap_tools.manage_ctrl_exec_envs
 
 Role to manage the execution environment on Ansible Controller. It will ensure
 that execution environments defined in the hub_ee_images variable exist in
@@ -40,7 +40,7 @@ passed in as parameters) is always nice for users too:
 ```
     - hosts: servers
       roles:
-        - role: schiphol.management.manage_hub_exec_envs
+        - role: xforce.aap_tools.manage_ctrl_exec_envs
           hub_host: automationcontroller.example.com
           hub_admin_user: admin
           hub_ee_registries:

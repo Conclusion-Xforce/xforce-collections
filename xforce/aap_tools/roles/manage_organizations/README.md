@@ -1,4 +1,4 @@
-# schiphol.management.manage_global
+# xforce.aap_tools.manage_organizations
 
 ===================================
 
@@ -18,7 +18,7 @@ ansible >= 2.14
 [=] azdo_pat: ""          : Azure DevOPS Personal Access Token
 [=] azdo_username         : Azure DevOPS Personal Access Token corresponding user
 [=] organizations         : List of dictionaries describing the organizations to configure on Automation Controller
-  [=] org_id              : 4-letter identifier of the Organization (Schiphol team)
+  [=] org_id              : Identifier of the Organization (Team)
   [=] name                : Name of the organization
   [-] description         : Description for this organization
   [-] instance_groups     : List of Execution Node instance groups for this organization (default: 'shared')
@@ -38,7 +38,7 @@ infra.ah_configuration
 
 - name: Call the manage_global role for configuring the automation controller globally
   ansible.builtin.include_role:
-    name: schiphol.management.manage_organizations
+    name: xforce.aap_tools.manage_organizations
   vars:
     controller_host: "localhost"
     controller_username: "admin"
@@ -49,7 +49,3 @@ infra.ah_configuration
 ## License
 
 BSD
-
-## Author Information
-
-Schipholgroup

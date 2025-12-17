@@ -9,7 +9,7 @@ namespace: xforce
 name: aap_mgmt
 
 # The version of the collection. Must be compatible with semantic versioning
-version: 1.0.0
+version: 1.0.1
 
 # The path to the Markdown (.md) readme file. This path is relative to the root of the collection
 readme: README.md
@@ -53,7 +53,7 @@ dependencies:
   ansible.platform: '>=2.5.0,<2.6.0'
 
 # The URL of the originating SCM repository
-repository: https://github.com/Alex-Bron/xforce-collections
+repository: https://github.com/Conclusion-Xforce/xforce-collections
 
 # The URL to any online docs
 documentation: http://docs.example.com
@@ -62,7 +62,7 @@ documentation: http://docs.example.com
 homepage: http://example.com
 
 # The URL to the collection issue tracker
-issues: https://github.com/Alex-Bron/xforce-collections/issues
+issues: https://github.com/Conclusion-Xforce/xforce-collections/issues
 
 # A list of file glob-like patterns used to filter any files or directories that should not be included in the build
 # artifact. A pattern is matched from the relative path of the file or directory of the collection directory. This

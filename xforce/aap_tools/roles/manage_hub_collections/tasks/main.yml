@@ -1,9 +1,0 @@
----
-# tasks file for manage_hub_collections
-- name: Perform input variable validation
-  ansible.builtin.include_tasks:
-    file: input_validation.yml
-
-- name: Configure and sync collection repositories
-  ansible.builtin.include_tasks:
-    file: configure.yml

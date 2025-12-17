@@ -1,6 +1,6 @@
 #
 *.retry
-.ansible
+.ansible/
 .cache
 
 # No collection tar-balls please

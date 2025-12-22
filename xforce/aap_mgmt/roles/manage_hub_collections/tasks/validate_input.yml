@@ -2,17 +2,17 @@
 - name: Check that a hub host is specified
   ansible.builtin.assert:
     that: platform_host | default('') | length
-    fail_msg: "No platform_host defined; aborting"
-    success_msg: "platform_host set to {{ platform_host }}"
+    fail_msg: No platform_host defined; aborting
+    success_msg: platform_host set to {{ platform_host }}
 
 - name: Check that a hub admin user is specified
   ansible.builtin.assert:
     that: aap_admin_user | default('') | length
-    fail_msg: "No aap_admin_user defined; aborting"
-    success_msg: "aap_admin_user set to {{ aap_admin_user }}"
+    fail_msg: No aap_admin_user defined; aborting
+    success_msg: aap_admin_user set to {{ aap_admin_user }}
 
 - name: Check that a hub admin password is specified
   ansible.builtin.assert:
     that: aap_admin_password | default('') | length
-    fail_msg: "No aap_admin_password defined; aborting"
-    success_msg: "aap_admin_password defined"
+    fail_msg: No aap_admin_password defined; aborting
+    success_msg: aap_admin_password defined

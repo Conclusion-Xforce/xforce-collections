@@ -2,11 +2,11 @@
 # defaults file for manage_hub_exec_envs
 aap_container_registries:
   - label: rh-registry
-    name: "Red Hat Registry"
+    name: Red Hat Registry
     host: registry.redhat.io
     proto: https
-    username: "registry_user"
-    password: "registry_token"
+    username: registry_user
+    password: registry_token
 
 aap_container_images:
   - namespace: ansible-automation-platform-25

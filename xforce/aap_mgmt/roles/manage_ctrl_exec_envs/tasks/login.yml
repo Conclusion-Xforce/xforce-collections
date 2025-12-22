@@ -1,11 +1,11 @@
 ---
 - name: Retrieve authentication token from controller using username/password
-  ansible.platform.token:
+  no_log: true
+  awx.awx.token:
     aap_hostname: "{{ platform_host }}"
     aap_username: "{{ aap_admin_user }}"
     aap_password: "{{ aap_admin_password }}"
     validate_certs: "{{ aap_validate_certs }}"
-    description: "Token for automated organization configuration"
-    scope: "write"
+    description: Token for automated organization configuration
+    scope: write
     state: present
-  no_log: true

@@ -1,9 +1,9 @@
 ---
 - name: Delete the authentication token with the token we created
-  ansible.platform.token:
+  when: aap_token is defined
+  awx.awx.token:
     aap_hostname: "{{ platform_host }}"
     aap_token: "{{ aap_token }}"
     existing_token: "{{ aap_token }}"
     state: absent
     validate_certs: "{{ aap_validate_certs }}"
-  when: aap_token is defined

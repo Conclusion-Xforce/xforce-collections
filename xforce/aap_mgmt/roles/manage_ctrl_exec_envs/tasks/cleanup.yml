@@ -11,7 +11,7 @@
 
 - name: Print images that can be deleted
   ansible.builtin.debug:
-    msg: "Image {{ cur_image['name'] }} can be deleted"
+    msg: Image {{ cur_image['name'] }} can be deleted
   when:
     - cur_image['image'] not in config_images
     - (cur_image['image'] | split('/'))[1] not in aap_container_namespaces
@@ -21,13 +21,6 @@
     loop_var: cur_image
 
 - name: Remove the execution environments from the controller that should not exist
-  ansible.controller.execution_environment:
-    controller_host: "{{ platform_host }}"
-    aap_token: "{{ aap_token }}"
-    validate_certs: "{{ aap_validate_certs | default(true) }}"
-    name: "{{ cur_image['name'] }}"
-    image: "{{ cur_image['image'] }}"
-    state: "absent"
   when:
     - cur_image['image'] not in config_images
     - (cur_image['image'] | split('/'))[1] not in aap_container_namespaces
@@ -35,3 +28,10 @@
   loop: "{{ __aap_ee_images }}"
   loop_control:
     loop_var: cur_image
+  awx.awx.execution_environment:
+    controller_host: "{{ platform_host }}"
+    aap_token: "{{ aap_token }}"
+    validate_certs: "{{ aap_validate_certs | default(true) }}"
+    name: "{{ cur_image['name'] }}"
+    image: "{{ cur_image['image'] }}"
+    state: absent

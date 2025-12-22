@@ -8,7 +8,11 @@
     container_credential: "{{ __aap_credentials | selectattr('credential_type', 'eq', registry_type_id | int) | first }}"
 
 - name: Add the execution environments to the controller
-  ansible.controller.execution_environment:
+  loop: "{{ aap_container_images | selectattr('type', 'eq', 'execution') }}"
+  loop_control:
+    loop_var: current_ee
+    label: "{{ current_ee.image }}"
+  awx.awx.execution_environment:
     controller_host: "{{ platform_host }}"
     aap_token: "{{ aap_token }}"
     validate_certs: "{{ aap_validate_certs | default(true) }}"
@@ -16,8 +20,4 @@
     description: "{{ current_ee.description }}"
     image: "{{ aap_main_url }}/{{ current_ee.namespace }}/{{ current_ee.image }}:{{ current_ee.tag | default('latest') }}"
     credential: "{{ container_credential.name }}"
-    state: "present"
-  loop: "{{ aap_container_images | selectattr('type', 'eq', 'execution') }}"
-  loop_control:
-    loop_var: current_ee
-    label: "{{ current_ee.image }}"
+    state: present

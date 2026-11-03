@@ -1,0 +1,69 @@
+---
+- name: "Create LDAP authentication method"
+  ansible.platform.authenticator:
+    aap_hostname: "{{ aap_platform_host }}"
+    aap_token: "{{ runtime_aap_token }}"
+    aap_validate_certs: "{{ aap_validate_certs | default(true) }}"
+    name: "{{ aap_ldap_auth_name }}"
+    type: ansible_base.authentication.authenticator_plugins.ldap
+    configuration:
+      SERVER_URI: >-
+        {{
+          aap_ldap_servers
+          | map('regex_replace', '^', aap_ldap_proto ~ '://')
+          | map('regex_replace', '$', ':' ~ (aap_ldap_port | string))
+          | list
+        }}
+      BIND_DN: "{{ aap_ldap_binddn }}"
+      BIND_PASSWORD: "{{ aap_ldap_bindpw }}"
+      START_TLS: false
+      GROUP_TYPE: "{{ aap_ldap_group_type }}"
+      GROUP_TYPE_PARAMS:
+        name_attr: "uid"
+      USER_SEARCH:
+        - "{{ aap_ldap_user_ou | lower }}"
+        - "SCOPE_SUBTREE"
+        - "(sAMAccountName=%(user)s)"
+      GROUP_SEARCH:
+        - "{{ aap_ldap_group_ou | lower }},{{ aap_ldap_domain | lower }}"
+        - "SCOPE_SUBTREE"
+        - "(objectClass=group)"
+      USER_ATTR_MAP:
+        first_name: "givenName"
+        last_name: "sn"
+        email: ""
+    state: present
+    enabled: true
+    create_objects: "{{ aap_create_ldap_objects }}"
+    remove_users: "{{ aap_remove_ldap_users }}"
+
+- name: Create LDAP initial authentication map
+  ansible.platform.authenticator_map:
+    aap_hostname: "{{ aap_platform_host }}"
+    aap_token: "{{ runtime_aap_token }}"
+    aap_validate_certs: "{{ aap_validate_certs | default(true) }}"
+    name: "Required group to logon"
+    authenticator: "{{ aap_ldap_auth_name }}"
+    revoke: true
+    map_type: allow
+    triggers:
+      groups:
+        has_and:
+          - "{{ aap_ldap_require_group }}"
+    state: present
+
+- name: Create LDAP auditor authentication map
+  ansible.platform.authenticator_map:
+    aap_hostname: "{{ aap_platform_host }}"
+    aap_token: "{{ runtime_aap_token }}"
+    aap_validate_certs: "{{ aap_validate_certs | default(true) }}"
+    name: "Platform Auditors"
+    authenticator: "{{ aap_ldap_auth_name }}"
+    revoke: true
+    map_type: role
+    triggers:
+      groups:
+        has_and:
+          - "{{ aap_ldap_auditor_group }}"
+    role: Platform Auditor
+    state: present

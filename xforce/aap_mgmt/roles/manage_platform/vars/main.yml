@@ -1,0 +1,5 @@
+---
+# vars file for manage_platform
+__aap_users: |
+  {{ lookup('ansible.controller.controller_api', 'users',
+        host=aap_platform_host, oauth_token=aap_token.token, validate_certs=aap_validate_certs, return_all=true) }}

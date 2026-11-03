@@ -1,0 +1,25 @@
+# defaults file for manage_platform
+---
+aap_validate_certs: true
+debug_mode: "{{ ansible_verbosity | int >= 2 }}"
+
+# defaults for variables usually passed to the role
+platform_host: "localhost"
+aap_admin_user: "admin"
+aap_admin_password: ""
+
+aap_create_ldap_objects: true
+aap_remove_ldap_users: false
+eda_hub_credential: "Automation Hub Decision Environment Container Registry"
+
+# Platform configuration settings
+platform_settings:
+  INSIGHTS_TRACKING_STATE: false
+  custom_login_info: Welcome to Ansible Automation Platform
+  # custom_logo: "data:image/png;base64,{{ lookup('file', 'my_logo.png') | b64encode }}"
+  ALLOW_OAUTH2_FOR_EXTERNAL_USERS: true
+
+# Controller configuration settings
+controller_settings:
+  - name: TOWER_URL_BASE
+    value: "https://{{ aap_platform_host }}"

@@ -1,0 +1,24 @@
+---
+- name: Create the custom organization roles
+  ansible.platform.role_definition:
+    aap_hostname: "{{ aap_platform_host }}"
+    aap_token: "{{ runtime_aap_token }}"
+    aap_validate_certs: "{{ aap_validate_certs | default(true) }}"
+    name: "{{ item.name }}"
+    description: "{{ item.description }}"
+    content_type: "{{ item.type }}"
+    permissions: "{{ item.permissions }}"
+    state: present
+  loop: "{{ aap_organization_role }}"
+
+- name: Create the custom hub roles
+  ansible.platform.role_definition:
+    aap_hostname: "{{ aap_platform_host }}"
+    aap_token: "{{ runtime_aap_token }}"
+    aap_validate_certs: "{{ aap_validate_certs | default(true) }}"
+    name: "{{ item.name }}"
+    description: "{{ item.description }}"
+    content_type: "{{ item.type }}"
+    permissions: "{{ item.permissions }}"
+    state: present
+  loop: "{{ aap_hub_role }}"

@@ -1,0 +1,19 @@
+---
+- name: Ensure desired configuration settings are done on Platform Gateway
+  ansible.platform.settings:
+    aap_hostname: "{{ aap_platform_host }}"
+    aap_token: "{{ runtime_aap_token }}"
+    aap_validate_certs: "{{ aap_validate_certs | default(true) }}"
+    settings: "{{ platform_settings }}"
+
+- name: Ensure desired configuration settings are done on Automation Controller
+  ansible.controller.settings:
+    controller_host: "{{ aap_platform_host }}"
+    controller_oauthtoken: "{{ runtime_aap_token }}"
+    validate_certs: "{{ aap_validate_certs | default(true) }}"
+    name: "{{ cur_setting.name }}"
+    value: "{{ cur_setting.value }}"
+  loop: "{{ controller_settings }}"
+  loop_control:
+    loop_var: cur_setting
+    label: "{{ cur_setting.name }}"

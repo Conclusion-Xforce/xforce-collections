@@ -1,0 +1,43 @@
+---
+# tasks file for manage_platform
+- name: Retrieve authentication token from platform using username/password
+  ansible.platform.token:
+    aap_hostname: "{{ aap_platform_host }}"
+    aap_username: "{{ aap_admin_user }}"
+    aap_password: "{{ aap_admin_password }}"
+    description: "Token from role xforce.aap_mgmt.manage_platform"
+    scope: "write"
+    state: present
+    aap_validate_certs: "{{ aap_validate_certs | default(true) }}"
+  no_log: false
+
+- name: Store the aap_token in a fact for later use
+  ansible.builtin.set_fact:
+    runtime_aap_token: "{{ aap_token }}"
+
+- name: Apply global configuration settings to the platform
+  ansible.builtin.include_tasks:
+    file: settings.yml
+
+- name: Create AAP system credentials
+  ansible.builtin.include_tasks:
+    file: credentials.yml
+
+- name: Create LDAP Authentication Method
+  ansible.builtin.include_tasks:
+    file: ldap.yml
+  when: aap_ldap_auth | default(false)
+
+- name: Create custom roles
+  ansible.builtin.include_tasks:
+    file: roles.yml
+
+- name: Delete the authentication token with the token we created
+  ansible.platform.token:
+    aap_hostname: "{{ aap_platform_host }}"
+    aap_username: "{{ aap_admin_user }}"
+    aap_password: "{{ aap_admin_password }}"
+    existing_token: "{{ runtime_aap_token }}"
+    state: absent
+    aap_validate_certs: "{{ aap_validate_certs | default(true) }}"
+  when: runtime_aap_token is defined

@@ -13,7 +13,7 @@ Collection:
 
 ## Role Variables
 
-- ***platform_host***: FQDN Hostname of the Platform Gateway host (or VIP-name)
+- ***aap_platform_host***: FQDN Hostname of the Platform Gateway host (or VIP-name)
 - ***aap_admin_user***: Username of an admin user on the Private Automation Hub
 - ***aap_admin_password***: Password of the admin user on the Private Automation Hub
 - aap_validate_certs: Boolean determining SSL certificate validation
@@ -38,7 +38,7 @@ Assuming a roles section is used in the playbook, this role could be called as:
   roles:
     - role: xforce.aap_mgmt.manage_ctrl_exec_envs
       vars:
-        platform_host: automationcontroller.example.com
+        aap_platform_host: automationcontroller.example.com
         aap_admin_user: admin
         aap_container_images:
           - namespace: ansible-automation-platform-25

@@ -16,22 +16,12 @@
         }}
       BIND_DN: "{{ aap_ldap_binddn }}"
       BIND_PASSWORD: "{{ aap_ldap_bindpw }}"
-      START_TLS: false
+      START_TLS: "{{ aap_ldap_starttls }}"
       GROUP_TYPE: "{{ aap_ldap_group_type }}"
-      GROUP_TYPE_PARAMS:
-        name_attr: "uid"
-      USER_SEARCH:
-        - "{{ aap_ldap_user_ou | lower }}"
-        - "SCOPE_SUBTREE"
-        - "(sAMAccountName=%(user)s)"
-      GROUP_SEARCH:
-        - "{{ aap_ldap_group_ou | lower }},{{ aap_ldap_domain | lower }}"
-        - "SCOPE_SUBTREE"
-        - "(objectClass=group)"
-      USER_ATTR_MAP:
-        first_name: "givenName"
-        last_name: "sn"
-        email: ""
+      GROUP_TYPE_PARAMS: "{{ aap_ldap_group_type_param }}"
+      USER_SEARCH: "{{ aap_ldap_user_search }}"
+      GROUP_SEARCH: "{{ aap_ldap_group_search }}"
+      USER_ATTR_MAP: "{{ aap_user_attr_map }}"
     state: present
     enabled: true
     create_objects: "{{ aap_create_ldap_objects }}"

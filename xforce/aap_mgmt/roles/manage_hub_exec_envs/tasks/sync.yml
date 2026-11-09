@@ -1,7 +1,7 @@
 ---
 - name: Sync the registries
   ansible.hub.ah_ee_registry_sync:
-    ah_host: "{{ platform_host }}"
+    ah_host: "{{ aap_platform_host }}"
     ah_username: "{{ aap_admin_user }}"
     ah_password: "{{ aap_admin_password }}"
     validate_certs: "{{ aap_validate_certs | default(true) }}"
@@ -15,7 +15,7 @@
 
 - name: Sync the execution environments on the hub
   ansible.hub.ah_ee_repository_sync:
-    ah_host: "{{ platform_host }}"
+    ah_host: "{{ aap_platform_host }}"
     ah_username: "{{ aap_admin_user }}"
     ah_password: "{{ aap_admin_password }}"
     validate_certs: "{{ aap_validate_certs | default(true) }}"
